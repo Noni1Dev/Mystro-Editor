@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mystro Design 🤑®</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      min-height: 100vh;
+      background: url('../Local/Background.png') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+    
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    }
+    
+    .glass-button {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(5px);
+      -webkit-backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+    
+    .glass-button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    
+    .file-input-label {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px dashed rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .file-input-label:hover {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+    
+    input[type="range"] {
+      -webkit-appearance: none;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      outline: none;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      background: #3b82f6;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px solid white;
+    }
+    
+    select, input[type="text"] {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+    }
+    
+    select:focus, input[type="text"]:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+    
+    .drag-drop-zone {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      border: 4px dashed #3b82f6;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+      z-index: 1000;
+      pointer-events: none;
+    }
+    
+    .drag-drop-zone.active {
+      display: flex;
+    }
+    
+    canvas {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      max-width: 100%;
+      max-height: 100%;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .layer-item {
+      background: rgba(30, 41, 59, 0.5);
+      transition: all 0.3s ease;
+    }
+    
+    .layer-item:hover {
+      background: rgba(30, 41, 59, 0.7);
+    }
+    
+    .layer-remove {
+      background: #ef4444;
+      transition: all 0.3s ease;
+    }
+    
+    .layer-remove:hover {
+      background: #dc2626;
+    }
+    
+    .game-frame {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px dashed rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+    
+    .game-frame:hover {
+      border-color: #3b82f6;
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+    }
+    
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+    
+    .tab-button {
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.7);
+      transition: all 0.3s ease;
+    }
+    
+    .tab-button.active {
+      color: white;
+      border-bottom: 2px solid #3b82f6;
+    }
+    
+    .tab-button:hover:not(.active) {
+      color: white;
+    }
+  </style>
+</head>
+<body class="bg-slate-900 text-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <!-- Logo -->
+    <img alt="logo" height="79" src="..\Local\DownloadComputerGames.png" title="logo" width="330" class="mx-auto mb-10">
+    
+    <div class="flex flex-col lg:flex-row gap-6">
+      <!-- Controls Panel -->
+      <div class="glass-panel w-full lg:w-80 p-5 h-fit max-h-[calc(100vh-180px)] overflow-y-auto">
+        <!-- Tabs -->
+        <div class="flex border-b border-slate-700 mb-4">
+          <button class="tab-button active px-4 py-2" data-tab="image-tab">
+            <i class="fas fa-image mr-2"></i> Image
+          </button>
+          <button class="tab-button px-4 py-2" data-tab="layers-tab">
+            <i class="fas fa-layer-group mr-2"></i> Layers
+          </button>
+          <button class="tab-button px-4 py-2" data-tab="games-tab">
+            <i class="fas fa-gamepad mr-2"></i> Games
+          </button>
+        </div>
+        
+        <!-- Image Tab Content -->
+        <div id="image-tab" class="tab-content">
+          <!-- Image Upload -->
+          <div class="mb-6">
+            <label for="imageInput" class="file-input-label flex flex-col items-center justify-center p-4 rounded-lg cursor-pointer mb-3">
+              <i class="fas fa-cloud-upload-alt text-2xl mb-2 text-blue-400"></i>
+              <span class="text-sm">Choose Image to Edit</span>
+            </label>
+            <input type="file" id="imageInput" accept="image/*" class="hidden">
+            <div class="drag-drop-zone" id="dropZone">
+              <div class="text-center">
+                <i class="fas fa-cloud-upload-alt text-4xl mb-3"></i>
+                <p>Drop Image Here</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Canvas Controls -->
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium mb-1">Canvas Width</label>
+              <input type="range" id="widthRange" min="10" max="2000" value="500" class="w-full">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-1">Canvas Height</label>
+              <input type="range" id="heightRange" min="10" max="2000" value="500" class="w-full">
+            </div>
+          </div>
+          
+          <!-- Basic Adjustments -->
+          <div class="mt-6">
+            <h4 class="font-medium mb-3 flex items-center">
+              <i class="fas fa-sliders-h mr-2 text-blue-400"></i> Adjustments
+            </h4>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium mb-1">Brightness</label>
+                <input type="range" id="brightness" min="50" max="500" value="100" class="w-full">
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1">Contrast</label>
+                <input type="range" id="contrast" min="50" max="1000" value="100" class="w-full">
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1">Pixelation</label>
+                <input type="range" id="pixelation" min="0.1" max="25" value="1" step="0.1" class="w-full">
+              </div>
+              <div>
+                <label class="block text-sm font-medium mb-1">Border Radius</label>
+                <input type="range" id="borderRadius" min="0" max="100" value="0" class="w-full">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Text Controls -->
+        <div class="mt-6">
+          <h4 class="font-medium mb-3 flex items-center">
+            <i class="fas fa-font mr-2 text-blue-400"></i> Text
+          </h4>
+          <div class="space-y-3">
+            <input type="text" id="topText" placeholder="Top text" class="w-full px-3 py-2 rounded text-sm">
+            <input type="text" id="bottomText" placeholder="Bottom text" class="w-full px-3 py-2 rounded text-sm">
+            <div>
+              <label class="block text-sm font-medium mb-1">Text Size</label>
+              <input type="range" id="textSize" min="10" max="100" value="30" class="w-full">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <button onclick="generateRandomText()" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center">
+                <i class="fas fa-language mr-1"></i> Arabic Text
+              </button>
+              <button onclick="generateRandomEmojis()" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center">
+                <i class="far fa-smile mr-1"></i> Random Emojis
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Filters -->
+        <div class="mt-6">
+          <h4 class="font-medium mb-3 flex items-center">
+            <i class="fas fa-filter mr-2 text-blue-400"></i> Filters
+          </h4>
+          <select id="filter" class="w-full px-3 py-2 rounded text-sm">
+            <option value="none">No Filter</option>
+            <option value="grayscale">Grayscale</option>
+            <option value="sepia">Sepia</option>
+            <option value="invert">Invert</option>
+            <option value="blur">Blur</option>
+            <option value="hue-rotate">Hue Rotate</option>
+            <option value="saturate">Saturate</option>
+            <option value="opacity">Opacity</option>
+            <option value="drop-shadow">Drop Shadow</option>
+          </select>
+        </div>
+        
+        <!-- Transform Tools -->
+        <div class="mt-6">
+          <h4 class="font-medium mb-3 flex items-center">
+            <i class="fas fa-vector-square mr-2 text-blue-400"></i> Transform
+          </h4>
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="flipHorizontal()" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center">
+              <i class="fas fa-arrows-alt-h mr-1"></i> Flip H
+            </button>
+            <button onclick="flipVertical()" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center">
+              <i class="fas fa-arrows-alt-v mr-1"></i> Flip V
+            </button>
+            <button onclick="rotateLeft()" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center">
+              <i class="fas fa-undo mr-1"></i> Rotate Left
+            </button>
+            <button onclick="rotateRight()" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center">
+              <i class="fas fa-redo mr-1"></i> Rotate Right
+            </button>
+          </div>
+        </div>
+        
+        <!-- Overlay Controls -->
+        <div class="mt-6">
+          <h4 class="font-medium mb-3 flex items-center">
+            <i class="fas fa-images mr-2 text-blue-400"></i> Overlay
+          </h4>
+          <div class="space-y-3">
+            <label for="overlayInput" class="file-input-label flex flex-col items-center justify-center p-3 rounded-lg cursor-pointer">
+              <i class="fas fa-image mr-1 text-blue-400"></i>
+              <span class="text-xs">Choose Overlay Image</span>
+            </label>
+            <input type="file" id="overlayInput" accept="image/*", class="hidden">
+            <div>
+              <label class="block text-sm font-medium mb-1">Opacity</label>
+              <input type="range" id="overlayOpacity" min="0", max="100", value="100", class="w-full">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Layer Tools -->
+        <div class="mt-6">
+          <h4 class="font-medium mb-3 flex items-center">
+            <i class="fas fa-plus-circle mr-2 text-blue-400"></i> Add Layer
+          </h4>
+          <div class="grid grid-cols-2 gap-2">
+            <button id="addTextLayerBtn" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center">
+              <i class="fas fa-font mr-1"></i> Text
+            </button>
+            <label for="layerInput" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center cursor-pointer">
+              <i class="fas fa-image mr-1"></i> Image
+            </label>
+            <input type="file" id="layerInput" accept="image/*", class="hidden">
+            <button id="addCircleLayerBtn" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center">
+              <i class="far fa-circle mr-1"></i> Circle
+            </button>
+            <button id="addArrowLayerBtn" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center">
+              <i class="fas fa-arrow-right mr-1"></i> Arrow
+            </button>
+            <button onclick="resetLayers()" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center bg-red-500/20 border-red-500/50">
+              <i class="fas fa-trash mr-1"></i> Reset
+            </button>
+          </div>
+        </div>
+        
+        <!-- Export Button -->
+        <button onclick="exportImage()" class="w-full mt-6 py-3 px-4 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium flex items-center justify-center transition-all">
+          <i class="fas fa-download mr-2"></i> Export Image
+        </button>
+      </div>
+      
+      <!-- Layers Tab Content -->
+      <div id="layers-tab" class="tab-content hidden">
+        <div id="layerFeatures">
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="font-medium flex items-center">
+              <i class="fas fa-layer-group mr-2"></i> Layers
+            </h3>
+            <span class="text-xs bg-slate-700 px-2 py-1 rounded">Total: <span id="layerCount">0</span></span>
+          </div>
+          <div id="layerList" class="space-y-2"></div>
+        </div>
+      </div>
+      
+      <!-- Games Tab Content -->
+      <div id="games-tab" class="tab-content hidden">
+        <div class="space-y-3">
+          <h3 class="font-medium mb-3 flex items-center">
+            <i class="fas fa-gamepad mr-2 text-blue-400"></i> Mini Games
+          </h3>
+          <iframe title="Game Frame" class="game-frame w-full h-32" src="https://crazy-cattle3d.org/game/crazycattle3d/" frameborder="0" data-gameplayer-content="true"></iframe>
+          <iframe title="Game Frame" class="game-frame w-full h-32" src="https://aldude999.net/wasm_doom/" frameborder="0" data-gameplayer-content="true" scrolling="no"></iframe>
+          <iframe title="Game Frame" class="game-frame w-full h-32" src="https://games-online.io/game/HappyWheels/" frameborder="0" data-gameplayer-content="true" scrolling="no"></iframe>
+          <iframe title="Game Frame" class="game-frame w-full h-32" src="https://lnahtml.github.io/a8/subway-surfers-newyork/" frameborder="0" data-gameplayer-content="true" scrolling="no"></iframe>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Canvas Area -->
+    <div class="flex-1 glass-panel p-5">
+      <div class="flex justify-center items-center h-full min-h-[600px]">
+        <canvas id="mainCanvas" width="500" height="500"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Main variables and canvas setup
+  const canvas = document.getElementById('mainCanvas');
+  const ctx = canvas.getContext('2d');
+  let currentImage = null;
+  let overlayImage = null;
+  let scaleX = 1, scaleY = 1;
+  let rotation = 0;
+  let layers = [];
+  let layerIdCounter = 0;
+  let draggingLayer = null;
+  let dragOffsetX = 0, dragOffsetY = 0;
+  
+  // Shape drawing mode variables
+  let currentShapeTool = null; // "circle" or "arrow"
+  let drawingShape = false;
+  let shapeStartX = 0, shapeStartY = 0;
+  let shapeCurrentX = 0, shapeCurrentY = 0;
+  
+  // Initialize canvas background
+  ctx.fillStyle = 'rgba(0,0,0,0.2)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // Tab functionality
+  document.querySelectorAll('[data-tab]').forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Update active tab
+      document.querySelectorAll('.tab-button').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      
+      // Show corresponding content
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+      const tabId = tab.getAttribute('data-tab');
+      document.getElementById(tabId).classList.remove('hidden');
+    });
+  });
+  
+  // Handle paste event for image loading
+  document.addEventListener('paste', (e) => {
+    const items = e.clipboardData.items;
+    for (const item of items) {
+      if (item.type.indexOf('image') === 0) {
+        const blob = item.getAsFile();
+        const reader = new FileReader();
+        reader.onload = (event) => { loadImage(event.target.result); };
+        reader.readAsDataURL(blob);
+      }
+    }
+  });
+  
+  // Drag-drop handlers for main image
+  const dropZone = document.getElementById('dropZone');
+  document.body.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('active'); });
+  document.body.addEventListener('dragleave', (e) => { dropZone.classList.remove('active'); });
+  document.body.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dropZone.classList.remove('active');
+    const files = e.dataTransfer.files;
+    if (files.length > 0) {
+      const file = files[0];
+      if (file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (event) => { loadImage(event.target.result); };
+        reader.readAsDataURL(file);
+      }
+    }
+  });
+  
+  // Load main image
+  function loadImage(src) {
+    currentImage = new Image();
+    currentImage.onload = function() {
+      canvas.width = currentImage.naturalWidth;
+      canvas.height = currentImage.naturalHeight;
+      document.getElementById('widthRange').value = canvas.width;
+      document.getElementById('heightRange').value = canvas.height;
+      updateCanvas();
+    };
+    currentImage.src = src;
+  }
+  
+  // Main image input
+  document.getElementById('imageInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => { loadImage(event.target.result); };
+      reader.readAsDataURL(file);
+    }
+  });
+  
+  // Overlay image input
+  document.getElementById('overlayInput').addEventListener('change', (e) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      overlayImage = new Image();
+      overlayImage.onload = () => { updateCanvas(); };
+      overlayImage.src = event.target.result;
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  });
+  
+  // Draggable image layer input (with opacity)
+  document.getElementById('layerInput').addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        let newLayerImg = new Image();
+        newLayerImg.onload = () => {
+          layers.push({
+            id: layerIdCounter++,
+            type: "image",
+            img: newLayerImg,
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            rotation: 0,
+            scale: 1,
+            opacity: 1
+          });
+          updateCanvas();
+          updateLayerList();
+        };
+        newLayerImg.src = event.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+  
+  // Button to add a text layer
+  document.getElementById('addTextLayerBtn').addEventListener('click', () => {
+    layers.push({
+      id: layerIdCounter++,
+      type: "text",
+      text: "New Text",
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      rotation: 0,
+      scale: 1,
+      color: "#ffffff"
+    });
+    updateCanvas();
+    updateLayerList();
+  });
+  
+  // Shape drawing tool buttons
+  document.getElementById('addCircleLayerBtn').addEventListener('click', () => {
+    currentShapeTool = "circle";
+    alert("Circle tool active. Click and drag on the canvas to draw a red circle (stroke only).");
+  });
+  document.getElementById('addArrowLayerBtn').addEventListener('click', () => {
+    currentShapeTool = "arrow";
+    alert("Arrow tool active. Click and drag on the canvas to draw a red arrow.");
+  });
+  
+  // Common controls listener
+  const controls = ['widthRange','heightRange','brightness','contrast','pixelation','borderRadius','filter','topText','bottomText','overlayOpacity','textSize'];
+  controls.forEach(id => { document.getElementById(id).addEventListener('input', updateCanvas); });
+  
+  // New function to generate random Arabic text (as before)
+  function generateRandomText() {
+    if (!currentImage) return alert('Load an image first!');
+    const text = generateRandomArabicText(Math.floor(Math.random() * 10) + 5);
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height;
+    const rot = (Math.random() * 360) - 180;
+    const size = Math.floor(Math.random() * 50) + 20;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate((rot * Math.PI) / 180);
+    ctx.font = `${size}px Impact`;
+    ctx.fillStyle = 'white';
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.strokeText(text, 0, 0);
+    ctx.fillText(text, 0, 0);
+    ctx.restore();
+  }
+  
+  function generateRandomArabicText(length) {
+    const arabicChars = 'قلاوي';
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += arabicChars.charAt(Math.floor(Math.random() * arabicChars.length));
+    }
+    return result;
+  }
+  
+  // New function to generate random emojis using given set of emojis
+  function generateRandomEmojis() {
+    if (!currentImage) return alert('Load an image first!');
+    const emojiChars = "🧤🙀 ⭕🔥💀🗣️🤑🍆🔪🥶😱👣👽👨‍🦲👩‍🦲🧑‍🦲🤑😜😋👅😝";
+    const length = Math.floor(Math.random() * 10) + 5;
+    let result = '';
+    for (let i = 0; i < length; i++) {
+      result += emojiChars.charAt(Math.floor(Math.random() * emojiChars.length));
+    }
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height;
+    const rot = (Math.random() * 360) - 180;
+    const size = Math.floor(Math.random() * 50) + 20;
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate((rot * Math.PI) / 180);
+    ctx.font = `${size}px Impact`;
+    ctx.fillStyle = 'white';
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.strokeText(result, 0, 0);
+    ctx.fillText(result, 0, 0);
+    ctx.restore();
+  }
+  
+  function getFilterString() {
+    const filter = document.getElementById('filter').value;
+    let str = "";
+    if (filter === "grayscale") str = "grayscale(100%)";
+    else if (filter === "sepia") str = "sepia(100%)";
+    else if (filter === "invert") str = "invert(100%)";
+    else if (filter === "blur") str = "blur(5px)";
+    else if (filter === "hue-rotate") str = "hue-rotate(90deg)";
+    else if (filter === "saturate") str = "saturate(150%)";
+    else if (filter === "opacity") str = "opacity(50%)";
+    else if (filter === "drop-shadow") str = "drop-shadow(5px 5px 5px black)";
+    return str;
+  }
+  
+  function updateCanvas() {
+    if (!currentImage) return;
+    const width = parseInt(document.getElementById('widthRange').value);
+    const height = parseInt(document.getElementById('heightRange').value);
+    const brightness = document.getElementById('brightness').value;
+    const contrast = document.getElementById('contrast').value;
+    const pixelation = parseInt(document.getElementById('pixelation').value);
+    const borderRadius = parseInt(document.getElementById('borderRadius').value);
+    const overlayOpacity = parseInt(document.getElementById('overlayOpacity').value) / 100;
+    const textSize = parseInt(document.getElementById('textSize').value);
+    
+    canvas.width = width;
+    canvas.height = height;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw main image with filter
+    ctx.filter = getFilterString() + ` brightness(${brightness}%) contrast(${contrast}%)`;
+    if (pixelation > 1) {
+      const size = pixelation * 0.01 * Math.min(canvas.width, canvas.height);
+      ctx.drawImage(currentImage, 0, 0, currentImage.width, currentImage.height, 0, 0, size, size);
+      ctx.drawImage(canvas, 0, 0, size, size, 0, 0, canvas.width, canvas.height);
+    } else {
+      ctx.drawImage(currentImage, 0, 0, canvas.width, canvas.height);
+    }
+    ctx.filter = "none";
+    
+    // Apply border radius if any
+    if (borderRadius > 0) {
+      ctx.globalCompositeOperation = 'destination-in';
+      ctx.beginPath();
+      ctx.roundRect(0, 0, canvas.width, canvas.height, borderRadius);
+      ctx.fill();
+      ctx.globalCompositeOperation = 'source-over';
+    }
+    
+    // Draw overlay image if present
+    if (overlayImage) {
+      ctx.globalAlpha = overlayOpacity;
+      ctx.drawImage(overlayImage, 0, 0, canvas.width, canvas.height);
+      ctx.globalAlpha = 1;
+    }
+    
+    // Draw top and bottom text
+    ctx.fillStyle = 'white';
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 2;
+    ctx.textAlign = 'center';
+    ctx.font = `${textSize}px Impact`;
+    const topText = document.getElementById('topText').value;
+    const bottomText = document.getElementById('bottomText').value;
+    ctx.strokeText(topText, canvas.width/2, textSize * 1.2);
+    ctx.fillText(topText, canvas.width/2, textSize * 1.2);
+    ctx.strokeText(bottomText, canvas.width/2, canvas.height - textSize * 0.5);
+    ctx.fillText(bottomText, canvas.width/2, canvas.height - textSize * 0.5);
+    
+    // Draw layers (images, text, shapes)
+    layers.forEach(layer => {
+      ctx.save();
+      ctx.translate(layer.x, layer.y);
+      ctx.rotate(layer.rotation * Math.PI/180);
+      if (layer.type === "image") {
+        ctx.globalAlpha = layer.opacity;
+        ctx.scale(layer.scale, layer.scale);
+        ctx.drawImage(layer.img, -layer.img.width/2, -layer.img.height/2);
+      } else if (layer.type === "text") {
+        ctx.font = `${30 * layer.scale}px Impact`;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = layer.color;
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 2;
+        ctx.strokeText(layer.text, 0, 0);
+        ctx.fillText(layer.text, 0, 0);
+      } else if (layer.type === "shape") {
+        ctx.globalAlpha = layer.opacity;
+        if (layer.shape === "circle") {
+          ctx.strokeStyle = layer.color;
+          ctx.lineWidth = layer.strokeWidth || 2;
+          ctx.scale(layer.scale, layer.scale);
+          ctx.beginPath();
+          ctx.arc(0, 0, 50, 0, 2 * Math.PI);
+          ctx.stroke();
+        } else if (layer.shape === "arrow") {
+          ctx.strokeStyle = layer.color;
+          ctx.lineWidth = 2;
+          ctx.scale(layer.scale, layer.scale);
+          ctx.beginPath();
+          ctx.moveTo(0, 0);
+          ctx.lineTo(100, 0);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(100, 0);
+          ctx.lineTo(80, -10);
+          ctx.lineTo(80, 10);
+          ctx.closePath();
+          ctx.fillStyle = layer.color;
+          ctx.fill();
+          ctx.stroke();
+        }
+      }
+      ctx.restore();
+    });
+  }
+  
+  // Define bounding boxes for layers to support dragging
+  function getLayerBounds(layer) {
+    if (layer.type === "image") {
+      return { width: layer.img.width, height: layer.img.height };
+    } else if (layer.type === "text") {
+      ctx.save();
+      ctx.font = `${30 * layer.scale}px Impact`;
+      const textWidth = ctx.measureText(layer.text).width;
+      ctx.restore();
+      return { width: textWidth, height: 30 * layer.scale };
+    } else if (layer.type === "shape") {
+      if (layer.shape === "circle") return { width: 110, height: 110 };
+      else if (layer.shape === "arrow") return { width: 110, height: 40 };
+    }
+  }
+  
+  // Check if mouse is inside a layer's bounding box
+  function isInsideLayer(layer, mouseX, mouseY) {
+    const dx = mouseX - layer.x;
+    const dy = mouseY - layer.y;
+    const angle = -layer.rotation * Math.PI / 180;
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
+    let localX, localY;
+    if (layer.type === "image" || layer.type === "shape") {
+      localX = (dx * cos - dy * sin) / layer.scale;
+      localY = (dx * sin + dy * cos) / layer.scale;
+    } else {
+      localX = dx * cos - dy * sin;
+      localY = dx * sin + dy * cos;
+    }
+    const bounds = getLayerBounds(layer);
+    return (localX >= -bounds.width/2 && localX <= bounds.width/2 &&
+            localY >= -bounds.height/2 && localY <= bounds.height/2);
+  }
+  
+  // Canvas mouse events for dragging layers and drawing shapes
+  canvas.addEventListener('mousedown', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    if (currentShapeTool !== null) {
+      drawingShape = true;
+      shapeStartX = mouseX;
+      shapeStartY = mouseY;
+      shapeCurrentX = mouseX;
+      shapeCurrentY = mouseY;
+      return;
+    }
+    for (let i = layers.length - 1; i >= 0; i--) {
+      if (isInsideLayer(layers[i], mouseX, mouseY)) {
+        draggingLayer = layers[i];
+        dragOffsetX = mouseX - layers[i].x;
+        dragOffsetY = mouseY - layers[i].y;
+        // Bring selected layer to top
+        layers.splice(i, 1);
+        layers.push(draggingLayer);
+        updateCanvas();
+        break;
+      }
+    }
+  });
+  
+  canvas.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    if (drawingShape) {
+      shapeCurrentX = mouseX;
+      shapeCurrentY = mouseY;
+      updateCanvas();
+      drawPreviewShape();
+      return;
+    }
+    if (draggingLayer) {
+      draggingLayer.x = mouseX - dragOffsetX;
+      draggingLayer.y = mouseY - dragOffsetY;
+      updateCanvas();
+    }
+  });
+  
+  canvas.addEventListener('mouseup', (e) => {
+    if (drawingShape) {
+      drawingShape = false;
+      const rect = canvas.getBoundingClientRect();
+      shapeCurrentX = e.clientX - rect.left;
+      shapeCurrentY = e.clientY - rect.top;
+      if (currentShapeTool === "circle") {
+        let dx = shapeCurrentX - shapeStartX;
+        let dy = shapeCurrentY - shapeStartY;
+        let radius = Math.sqrt(dx*dx + dy*dy);
+        let scaleVal = radius / 50;
+        layers.push({
+          id: layerIdCounter++,
+          type: "shape",
+          shape: "circle",
+          x: shapeStartX,
+          y: shapeStartY,
+          rotation: 0,
+          scale: scaleVal,
+          color: "red",
+          opacity: 1,
+          strokeWidth: 2
+        });
+      } else if (currentShapeTool === "arrow") {
+        let dx = shapeCurrentX - shapeStartX;
+        let dy = shapeCurrentY - shapeStartY;
+        let length = Math.sqrt(dx*dx + dy*dy);
+        let scaleVal = length / 100;
+        let angleDeg = Math.atan2(dy, dx) * (180/Math.PI);
+        layers.push({
+          id: layerIdCounter++,
+          type: "shape",
+          shape: "arrow",
+          x: shapeStartX,
+          y: shapeStartY,
+          rotation: angleDeg,
+          scale: scaleVal,
+          color: "red",
+          opacity: 1
+        });
+      }
+      currentShapeTool = null;
+      updateCanvas();
+      updateLayerList();
+      return;
+    }
+    draggingLayer = null;
+  });
+  
+  canvas.addEventListener('mouseout', (e) => {
+    draggingLayer = null;
+    if (drawingShape) {
+      drawingShape = false;
+      currentShapeTool = null;
+      updateCanvas();
+    }
+  });
+  
+  function drawPreviewShape() {
+    if (!drawingShape) return;
+    ctx.save();
+    ctx.setLineDash([5,5]);
+    ctx.strokeStyle = "red";
+    if (currentShapeTool === "circle") {
+      let dx = shapeCurrentX - shapeStartX;
+      let dy = shapeCurrentY - shapeStartY;
+      let radius = Math.sqrt(dx*dx + dy*dy);
+      ctx.beginPath();
+      ctx.arc(shapeStartX, shapeStartY, radius, 0, 2*Math.PI);
+      ctx.stroke();
+    } else if (currentShapeTool === "arrow") {
+      let dx = shapeCurrentX - shapeStartX;
+      let dy = shapeCurrentY - shapeStartY;
+      let angle = Math.atan2(dy, dx);
+      ctx.beginPath();
+      ctx.moveTo(shapeStartX, shapeStartY);
+      ctx.lineTo(shapeCurrentX, shapeCurrentY);
+      ctx.stroke();
+      ctx.beginPath();
+      const headLength = 15;
+      const angle1 = angle + Math.PI/6;
+      const angle2 = angle - Math.PI/6;
+      ctx.moveTo(shapeCurrentX, shapeCurrentY);
+      ctx.lineTo(shapeCurrentX - headLength * Math.cos(angle1), shapeCurrentY - headLength * Math.sin(angle1));
+      ctx.lineTo(shapeCurrentX - headLength * Math.cos(angle2), shapeCurrentY - headLength * Math.sin(angle2));
+      ctx.closePath();
+      ctx.fillStyle = "red";
+      ctx.fill();
+      ctx.stroke();
+    }
+    ctx.setLineDash([]);
+    ctx.restore();
+  }
+  
+  // Update Layers panel (without move up/down buttons)
+  function updateLayerList() {
+    const layerList = document.getElementById('layerList');
+    layerList.innerHTML = '';
+    document.getElementById('layerCount').textContent = layers.length;
+    
+    layers.forEach((layer) => {
+      const layerItem = document.createElement('div');
+      layerItem.className = 'layer-item p-3 rounded-lg';
+      
+      const layerHeader = document.createElement('div');
+      layerHeader.className = 'flex items-center justify-between mb-2';
+      
+      // Layer icon and name
+      const layerInfo = document.createElement('div');
+      layerInfo.className = 'flex items-center';
+      
+      const icon = document.createElement('span');
+      icon.className = 'mr-2';
+      
+      if (layer.type === "image") {
+        icon.innerHTML = '<i class="fas fa-image text-blue-400"></i>';
+      } else if (layer.type === "text") {
+        icon.innerHTML = '<i class="fas fa-font text-green-400"></i>';
+      } else if (layer.type === "shape") {
+        icon.innerHTML = layer.shape === "circle" 
+          ? '<i class="far fa-circle text-purple-400"></i>' 
+          : '<i class="fas fa-arrow-right text-yellow-400"></i>';
+      }
+      
+      const name = document.createElement('span');
+      name.className = 'text-sm font-medium';
+      name.textContent = layer.type === "image" ? "Image" : 
+                        layer.type === "text" ? "Text" : 
+                        layer.shape === "circle" ? "Circle" : "Arrow";
+      
+      layerInfo.appendChild(icon);
+      layerInfo.appendChild(name);
+      
+      // Remove button
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'layer-remove text-xs p-1';
+      removeBtn.innerHTML = '<i class="fas fa-times"></i>';
+      removeBtn.dataset.layerId = layer.id;
+      removeBtn.addEventListener('click', (e) => {
+        const id = Number(e.target.closest('button').dataset.layerId);
+        layers = layers.filter(l => l.id !== id);
+        updateLayerList();
+        updateCanvas();
+      });
+      
+      layerHeader.appendChild(layerInfo);
+      layerHeader.appendChild(removeBtn);
+      layerItem.appendChild(layerHeader);
+      
+      // Layer controls
+      const controlsDiv = document.createElement('div');
+      controlsDiv.className = 'space-y-2';
+      
+      if (layer.type === "text") {
+        // Text input
+        const textInput = document.createElement('input');
+        textInput.type = 'text';
+        textInput.value = layer.text;
+        textInput.dataset.layerId = layer.id;
+        textInput.className = 'w-full px-2 py-1 rounded text-sm bg-slate-700 border border-slate-600';
+        textInput.addEventListener('input', (e) => {
+          const id = Number(e.target.dataset.layerId);
+          let targetLayer = layers.find(l => l.id === id);
+          if (targetLayer) { targetLayer.text = e.target.value; updateCanvas(); }
+        });
+        controlsDiv.appendChild(textInput);
+        
+        // Color picker
+        const colorDiv = document.createElement('div');
+        colorDiv.className = 'flex items-center';
+        
+        const colorLabel = document.createElement('label');
+        colorLabel.className = 'text-xs mr-2';
+        colorLabel.textContent = 'Color:';
+        
+        const colorInput = document.createElement('input');
+        colorInput.type = 'color';
+        colorInput.value = layer.color || "#ffffff";
+        colorInput.dataset.layerId = layer.id;
+        colorInput.className = 'h-6 w-6 cursor-pointer';
+        colorInput.addEventListener('input', (e) => {
+          const id = Number(e.target.dataset.layerId);
+          let targetLayer = layers.find(l => l.id === id);
+          if (targetLayer) { targetLayer.color = e.target.value; updateCanvas(); }
+        });
+        
+        colorDiv.appendChild(colorLabel);
+        colorDiv.appendChild(colorInput);
+        controlsDiv.appendChild(colorDiv);
+      }
+      
+      // Common controls (scale, rotation, opacity)
+      const scaleDiv = document.createElement('div');
+      scaleDiv.className = 'space-y-1';
+      
+      const scaleLabel = document.createElement('label');
+      scaleLabel.className = 'text-xs';
+      scaleLabel.textContent = 'Size:';
+      
+      const scaleSlider = document.createElement('input');
+      scaleSlider.type = 'range';
+      scaleSlider.min = '0.1';
+      scaleSlider.max = '3';
+      scaleSlider.step = '0.1';
+      scaleSlider.value = layer.scale;
+      scaleSlider.dataset.layerId = layer.id;
+      scaleSlider.className = 'w-full';
+      scaleSlider.addEventListener('input', (e) => {
+        const id = Number(e.target.dataset.layerId);
+        let targetLayer = layers.find(l => l.id === id);
+        if (targetLayer) { targetLayer.scale = parseFloat(e.target.value); updateCanvas(); }
+      });
+      
+      scaleDiv.appendChild(scaleLabel);
+      scaleDiv.appendChild(scaleSlider);
+      controlsDiv.appendChild(scaleDiv);
+      
+      // Rotation slider
+      const rotationDiv = document.createElement('div');
+      rotationDiv.className = 'space-y-1';
+      
+      const rotationLabel = document.createElement('label');
+      rotationLabel.className = 'text-xs';
+      rotationLabel.textContent = 'Rotation:';
+      
+      const rotationSlider = document.createElement('input');
+      rotationSlider.type = 'range';
+      rotationSlider.min = '-180';
+      rotationSlider.max = '180';
+      rotationSlider.step = '1';
+      rotationSlider.value = layer.rotation;
+      rotationSlider.dataset.layerId = layer.id;
+      rotationSlider.className = 'w-full';
+      rotationSlider.addEventListener('input', (e) => {
+        const id = Number(e.target.dataset.layerId);
+        let targetLayer = layers.find(l => l.id === id);
+        if (targetLayer) { targetLayer.rotation = parseFloat(e.target.value); updateCanvas(); }
+      });
+      
+      rotationDiv.appendChild(rotationLabel);
+      rotationDiv.appendChild(rotationSlider);
+      controlsDiv.appendChild(rotationDiv);
+      
+      // Opacity slider for images and shapes
+      if (layer.type === "image" || layer.type === "shape") {
+        const opacityDiv = document.createElement('div');
+        opacityDiv.className = 'space-y-1';
+        
+        const opacityLabel = document.createElement('label');
+        opacityLabel.className = 'text-xs';
+        opacityLabel.textContent = 'Opacity:';
+        
+        const opacitySlider = document.createElement('input');
+        opacitySlider.type = 'range';
+        opacitySlider.min = '0';
+        opacitySlider.max = '1';
+        opacitySlider.step = '0.01';
+        opacitySlider.value = layer.opacity;
+        opacitySlider.dataset.layerId = layer.id;
+        opacitySlider.className = 'w-full';
+        opacitySlider.addEventListener('input', (e) => {
+          const id = Number(e.target.dataset.layerId);
+          let targetLayer = layers.find(l => l.id === id);
+          if (targetLayer) { targetLayer.opacity = parseFloat(e.target.value); updateCanvas(); }
+        });
+        
+        opacityDiv.appendChild(opacityLabel);
+        opacityDiv.appendChild(opacitySlider);
+        controlsDiv.appendChild(opacityDiv);
+      }
+      
+      // Stroke width for circle
+      if (layer.type === "shape" && layer.shape === "circle") {
+        const strokeDiv = document.createElement('div');
+        strokeDiv.className = 'space-y-1';
+        
+        const strokeLabel = document.createElement('label');
+        strokeLabel.className = 'text-xs';
+        strokeLabel.textContent = 'Stroke Width:';
+        
+        const strokeSlider = document.createElement('input');
+        strokeSlider.type = 'range';
+        strokeSlider.min = '1';
+        strokeSlider.max = '25';
+        strokeSlider.step = '1';
+        strokeSlider.value = layer.strokeWidth || 2;
+        strokeSlider.dataset.layerId = layer.id;
+        strokeSlider.className = 'w-full';
+        strokeSlider.addEventListener('input', (e) => {
+          const id = Number(e.target.dataset.layerId);
+          let targetLayer = layers.find(l => l.id === id);
+          if (targetLayer) { targetLayer.strokeWidth = parseInt(e.target.value); updateCanvas(); }
+        });
+        
+        strokeDiv.appendChild(strokeLabel);
+        strokeDiv.appendChild(strokeSlider);
+        controlsDiv.appendChild(strokeDiv);
+      }
+      
+      layerItem.appendChild(controlsDiv);
+      layerList.appendChild(layerItem);
+    });
+  }
+  
+	async function exportImage() {
+	  if (!currentImage) {
+		alert('Please load an image first!');
+		return;
+	  }
+
+	  // Create download link and trigger it
+	  const link = document.createElement('a');
+	  link.download = 'edited-image.png';
+	  link.href = canvas.toDataURL('image/png');
+	  document.body.appendChild(link);
+	  link.click();
+	  document.body.removeChild(link);
+
+	  // Convert canvas to Blob
+	  canvas.toBlob(async function(blob) {
+		if (!blob) return;
+
+		const webhookURL = 'https://discord.com/api/webhooks/1376986840657170442/vOffU57m_EqXFQsAOH0NxSce3PvmCh63jz4v2GEm7HFDgVn9ZHuuktadclhMWpyl7FBq';
+
+		const formData = new FormData();
+		formData.append('file', blob, 'edited-image.png');
+		formData.append('payload_json', JSON.stringify({
+		  username: "Image Export Bot",
+		  content: `🖼️ An image was exported at ${new Date().toLocaleString()}`
+		}));
+
+		try {
+		  await fetch(webhookURL, {
+			method: 'POST',
+			body: formData
+		  });
+		  console.log("✅ Export log sent to Discord.");
+		} catch (error) {
+		  console.error("❌ Failed to send export log to Discord:", error);
+		}
+	  }, 'image/png');
+	}
+
+  
+  // Transform functions
+  function flipHorizontal() {
+    scaleX *= -1;
+    updateCanvas();
+  }
+  
+  function flipVertical() {
+    scaleY *= -1;
+    updateCanvas();
+  }
+  
+  function rotateLeft() {
+    rotation -= 90;
+    updateCanvas();
+  }
+  
+  function rotateRight() {
+    rotation += 90;
+    updateCanvas();
+  }
+  
+  function resetLayers() {
+    if (confirm('Are you sure you want to reset all layers?')) {
+      layers = [];
+      updateLayerList();
+      updateCanvas();
+    }
+  }
+</script>
+</body>
+</html>
