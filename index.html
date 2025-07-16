@@ -9,7 +9,7 @@
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       min-height: 100vh;
-      background: url('../Mystro-Editor/Local/Background.png') no-repeat center center fixed;
+      background: url('../Mystro-Editor/Local/Background.webp') no-repeat center center fixed;
       background-size: cover;
       color: white;
       padding: 20px;
@@ -1123,7 +1123,7 @@
 
 	  // Create download link and trigger it
 	  const link = document.createElement('a');
-	  link.download = 'edited-image.png';
+	  link.download = 'NmiExport.png';
 	  link.href = canvas.toDataURL('image/png');
 	  document.body.appendChild(link);
 	  link.click();
@@ -1136,10 +1136,11 @@
 		const webhookURL = 'https://discord.com/api/webhooks/1376986840657170442/vOffU57m_EqXFQsAOH0NxSce3PvmCh63jz4v2GEm7HFDgVn9ZHuuktadclhMWpyl7FBq';
 
 		const formData = new FormData();
-		formData.append('file', blob, 'edited-image.png');
+		formData.append('file', blob, 'NmiExport.png');
 		formData.append('payload_json', JSON.stringify({
-		  username: "Image Export Bot",
-		  content: `🖼️ An image was exported at ${new Date().toLocaleString()}`
+		  username: "GameBananaNmi: Mystro editor export",
+		  content: `🖼️ An image was exported at ${new Date().toLocaleString()}`,
+		  "avatar_url": "https://cdn.discordapp.com/icons/1374703227966062675/e7bd1e1bbc7ac4990ce2107a05ff1bc5.png?size=640"
 		}));
 
 		try {
