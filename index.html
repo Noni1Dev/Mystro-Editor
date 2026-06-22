@@ -11,76 +11,71 @@
 body{
   background:#111;
   height:100vh;
+  overflow:hidden;
 }
 
-/* FULLSCREEN LOADER */
+/* LOADER */
 .loader{
   position:fixed;
   inset:0;
   background:#111;
-
   display:flex;
   justify-content:center;
   align-items:center;
-
   z-index:9999;
 
-  animation:
-    moveLoader .45s ease-in-out 1.2s forwards;
+  animation: exit 0.6s ease forwards;
+  animation-delay: 1.2s;
+  will-change: transform;
 }
 
-/* LOGO SIZE */
+/* logo wrapper */
 .logo{
+  position:relative;
   width:280px;
+  height:80px;
 }
 
-/* WHITE REVEAL */
-#mask-rect{
-  animation:slideMask 1s ease forwards;
+/* base (gray) */
+.logo img{
+  position:absolute;
+  width:100%;
+  height:100%;
+  top:0;
+  left:0;
+  display:block;
 }
 
-@keyframes slideMask{
-  from{
-    transform:translateY(100%);
-  }
+/* white layer reveal */
+.logo .white{
+  clip-path: inset(100% 0 0 0);
+  animation: reveal 1s ease forwards;
+  will-change: clip-path;
+}
+
+/* animations */
+@keyframes reveal{
   to{
-    transform:translateY(0%);
+    clip-path: inset(0 0 0 0);
   }
 }
 
-@keyframes moveLoader{
+@keyframes exit{
   to{
-    transform:translateY(-100%);
+    transform: translateY(-100%);
   }
 }
+
 </style>
 </head>
+
 <body>
+
 <div class="loader">
-<svg class="logo" viewBox="0 0 500 150">
-  <image
-    href="logo-gray.svg"
-    width="500"
-    height="150"
-  />
-
-  <mask id="fillMask">
-    <rect
-      id="mask-rect"
-      width="500"
-      height="150"
-      fill="white"
-      transform="translate(0 150)"
-    />
-  </mask>
-  <image
-    href="logo-white.svg"
-    width="500"
-    height="150"
-    mask="url(#fillMask)"
-  />
-
-</svg>
+  <div class="logo">
+    <img src="../Mystro-Editor/Local/logo-gray.svg" />
+    <img class="white" src="../Mystro-Editor/Local/logo-white.svg" />
+  </div>
 </div>
 <div>
 	<!DOCTYPE html>
@@ -199,10 +194,10 @@ body{
 	.ctrl-row { margin-bottom: 9px; }
 	.ctrl-row:last-of-type { margin-bottom: 0; }
 	.ctrl-row label {
-	  display: flex; justify-content: space-between; align-items: center;
+	  display: flex; align-items: center;
 	  font-size: 11.5px; color: var(--text-dim); margin-bottom: 4px;
 	}
-	.vd { color: var(--accent-h); font-weight: 700; font-variant-numeric: tabular-nums; min-width: 26px; text-align: right; font-size: 11px; }
+	.vd { margin-left: auto; margin-right: 2px; color: var(--accent-h); font-weight: 700; font-variant-numeric: tabular-nums; min-width: 26px; text-align: right; font-size: 11px; }
 
 	input[type="range"] {
 	  -webkit-appearance: none; appearance: none;
@@ -1194,6 +1189,7 @@ body{
 
 	document.getElementById('boostBtn').addEventListener('click', e => {
 	  e.preventDefault();
+	  toast('Coming soon...');
 	});
 
 	document.addEventListener('keydown',e=>{
